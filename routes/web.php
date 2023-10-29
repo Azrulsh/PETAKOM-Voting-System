@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\auth\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,12 +27,6 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
-    Route::get('/', function () {
-        return view('dashboard');
-    })->name('home');
+    Route::get('/dashboard', [UserController::class, 'index']);
+    Route::get('/', [UserController::class, 'index']);
 });
-
-
