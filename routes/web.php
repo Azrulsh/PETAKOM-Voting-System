@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\auth\UserController;
+use App\Http\Controllers\ManageCandidateController;
+use App\Http\Controllers\ManageCriteriaController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,4 +31,29 @@ Route::middleware([
 ])->group(function () {
     Route::get('/dashboard', [UserController::class, 'index']);
     Route::get('/', [UserController::class, 'index']);
+});
+
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    // Manage Criteria
+    Route::get('/', [ManageCriteriaController::class, 'index'],);
+    Route::post('/manage-criteria', [ManageCriteriaController::class, 'store'],);
+    Route::post('/manage-criteria/{id}', [ManageCriteriaController::class, 'update'],);
+    Route::get('/manage-criteria/{id}/delete', [ManageCriteriaController::class, 'destroy'],);
+});
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    // Manage Candidate
+    Route::get('/', [ManageCandidateController::class, 'index'],);
+    Route::post('/manage-candidate', [ManageCandidateController::class, 'store'],);
+    Route::post('/manage-candidate/{id}', [ManageCandidateController::class, 'update'],);
+    Route::get('/manage-candidate/{id}/delete', [ManageCandidateController::class, 'destroy'],);
 });
