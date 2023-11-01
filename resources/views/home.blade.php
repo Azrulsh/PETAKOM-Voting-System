@@ -75,8 +75,31 @@
     </div>
 
     <div id="Home" class="tabcontent">
-        <h3>Tokyo</h3>
-        <p>Tokyo is the capital of Japan.</p>
+        <div class="dashboard-content">
+            <h1>Welcome Back, {{ Auth::user()->name }}</h1>
+            <hr class="solid">
+
+            <div class="container px-4 text-center">
+                <div class="row gx-2">
+                    <div class="col">
+                        <div class="totalCandidate">
+                            <div class="tutorial">
+                                <p id="totalCandidate">{{ DB::table('manage_candidates')->count() }}<br>Total Candidate</p>
+                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" style="height: 50px; width: 50px; margin-bottom: 30px;" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/></svg>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="totalCandidate">
+                            <div class="tutorial">
+                                <p id="totalCandidate">{{ DB::table('manage_criterias')->count() }}<br>Total Candidate</p>
+                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" style="height: 50px; width: 50px; margin-bottom: 30px;" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M40 48C26.7 48 16 58.7 16 72v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V72c0-13.3-10.7-24-24-24H40zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zM16 232v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V232c0-13.3-10.7-24-24-24H40c-13.3 0-24 10.7-24 24zM40 368c-13.3 0-24 10.7-24 24v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V392c0-13.3-10.7-24-24-24H40z"/></svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     {{-- Manage Candidate --}}
@@ -192,8 +215,8 @@
                                                         <input type="number" min="0" max="5"
                                                             class="form-control" placeholder="Ex: 3.5 rating"
                                                             aria-label="leadership_point"
-                                                            aria-describedby="basic-addon1" name="leadership_point" value="{{$candidate->leadership_point}}"
-                                                            required>
+                                                            aria-describedby="basic-addon1" name="leadership_point"
+                                                            value="{{ $candidate->leadership_point }}" required>
                                                     </div>
                                                 </div>
                                             </div>
@@ -204,7 +227,7 @@
                                                         <input type="text" class="form-control"
                                                             placeholder="Ex: Bachelor of Science Computer"
                                                             aria-label="course" aria-describedby="basic-addon1"
-                                                            name="course" value="{{$candidate->course}}" required>
+                                                            name="course" value="{{ $candidate->course }}" required>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6 col-md-5 offset-md-2 col-lg-6 offset-lg-0">
@@ -215,7 +238,9 @@
                                                             class="form-control" placeholder="Ex: 3.5 rating"
                                                             aria-label="community_service_point"
                                                             aria-describedby="basic-addon1"
-                                                            name="community_service_point" value="{{$candidate->community_service_point}}" required>
+                                                            name="community_service_point"
+                                                            value="{{ $candidate->community_service_point }}"
+                                                            required>
                                                     </div>
                                                 </div>
                                             </div>
@@ -225,7 +250,8 @@
                                                         <span class="input-group-text" id="basic-addon1">Year</span>
                                                         <input type="number" class="form-control"
                                                             placeholder="Ex: 2000" aria-label="year"
-                                                            aria-describedby="basic-addon1" name="year" value="{{$candidate->year}}" required>
+                                                            aria-describedby="basic-addon1" name="year"
+                                                            value="{{ $candidate->year }}" required>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6 col-md-5 offset-md-2 col-lg-6 offset-lg-0">
@@ -235,8 +261,8 @@
                                                         <input type="number" min="0" max="5"
                                                             class="form-control" placeholder="Ex: 3.5 rating"
                                                             aria-label="academic_point"
-                                                            aria-describedby="basic-addon1" name="academic_point" value="{{$candidate->academic_point}}"
-                                                            required>
+                                                            aria-describedby="basic-addon1" name="academic_point"
+                                                            value="{{ $candidate->academic_point }}" required>
                                                     </div>
                                                 </div>
                                             </div>
@@ -248,7 +274,8 @@
                                                         <input type="number" min="0" max="2"
                                                             class="form-control" placeholder="Ex: 2"
                                                             aria-label="semester" aria-describedby="basic-addon1"
-                                                            name="semester" value="{{$candidate->semester}}" required>
+                                                            name="semester" value="{{ $candidate->semester }}"
+                                                            required>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6 col-md-5 offset-md-2 col-lg-6 offset-lg-0">
@@ -258,7 +285,8 @@
                                                         <input type="text" class="form-control"
                                                             placeholder="Ex: Type the manifesto"
                                                             aria-label="manifesto" aria-describedby="basic-addon1"
-                                                            name="manifesto" value="{{$candidate->manifesto}}" required>
+                                                            name="manifesto" value="{{ $candidate->manifesto }}"
+                                                            required>
                                                     </div>
                                                 </div>
                                             </div>
@@ -269,7 +297,8 @@
                                                             id="basic-addon1">Position</span>
                                                         <input type="text" class="form-control"
                                                             placeholder="Ex: Type the position" aria-label="position"
-                                                            aria-describedby="basic-addon1" name="position" value="{{$candidate->position}}" required>
+                                                            aria-describedby="basic-addon1" name="position"
+                                                            value="{{ $candidate->position }}" required>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6 col-md-5 offset-md-2 col-lg-6 offset-lg-0">
@@ -278,8 +307,8 @@
                                                             video</span>
                                                         <input type="text" class="form-control"
                                                             placeholder="Ex: youtube.com" aria-label="video_link"
-                                                            aria-describedby="basic-addon1" name="video_link" value="{{$candidate->video_link}}"
-                                                            required>
+                                                            aria-describedby="basic-addon1" name="video_link"
+                                                            value="{{ $candidate->video_link }}" required>
                                                     </div>
                                                 </div>
                                             </div>
