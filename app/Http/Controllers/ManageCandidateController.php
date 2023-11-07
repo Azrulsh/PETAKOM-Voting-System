@@ -3,24 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\ManageCandidate;
-use App\Models\ManageCriteria;
 use Illuminate\Http\Request;
 
 class ManageCandidateController extends Controller
 {
-    // Display all Candidates
+    // Display Candidate
     public function index()
     {
         $candidates = ManageCandidate::all();
-        $criterias = ManageCriteria::all();
         return view(
-            'home',
-            compact(
-                [
-                    'candidates',
-                    'criterias',
-                ],
-            ),
+            'manage_candidate.view_manage_candidate',
+            ['candidates' => $candidates],
         );
     }
 
@@ -28,7 +21,7 @@ class ManageCandidateController extends Controller
     public function store(Request $request)
     {
         ManageCandidate::create($request->all());
-        return redirect('/');
+        return redirect('/viewCandidate');
     }
 
     // Update Candidate inside DB
@@ -36,7 +29,7 @@ class ManageCandidateController extends Controller
     {
         $criteria = ManageCandidate::find($id);
         $criteria->update($request->all());
-        return redirect('/');
+        return redirect('/viewCandidate');
     }
 
     // Delete Criteria inside DB
@@ -44,6 +37,6 @@ class ManageCandidateController extends Controller
     {
         $criteria = ManageCandidate::find($id);
         $criteria->delete($criteria);
-        return redirect('/')->with('delete', 'Your Card Success been Deleted!.');
+        return redirect('/viewCandidate')->with('delete', 'Your Card Success been Deleted!.');
     }
 }

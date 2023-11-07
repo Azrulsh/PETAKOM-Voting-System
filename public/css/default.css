@@ -168,34 +168,6 @@
     height: 50px;
 }
 
-#tableManageCriteria {
-    font-family: Arial, Helvetica, sans-serif;
-    border-collapse: collapse;
-    width: 100%;
-}
-
-#tableManageCriteria td,
-#customers th {
-    border: 1px solid #ddd;
-    padding: 8px;
-}
-
-#tableManageCriteria tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
-
-#tableManageCriteria tr:hover {
-    background-color: #ddd;
-}
-
-#tableManageCriteria th {
-    padding-top: 12px;
-    padding-bottom: 12px;
-    text-align: left;
-    background-color: red;
-    color: white;
-}
-
 .picture-container {
     position: relative;
     cursor: pointer;
@@ -284,4 +256,132 @@ hr.solid {
     font-style: normal;
     font-weight: 700;
     line-height: 26px; /* 130% */
+}
+
+.main {
+    margin-left: 178px;
+    min-height: 100%;
+    background: white;
+}
+
+.sidebar {
+    background-color: red;
+    overflow-x: hidden;
+    padding-top: 16px;
+    width: 200px;
+    float: left;
+    min-height: 100%;
+}
+
+.sidebar a {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 20px;
+    color: black;
+    display: block;
+}
+
+.sidebar a:hover,
+.w3-button:hover {
+    color: #f1f1f1;
+}
+
+.main {
+    margin-left: 160px; /* Same as the width of the sidenav */
+    padding: 0px 10px;
+    width: 100%;
+}
+
+.manage-candidate {
+    margin-left: 200px;
+    margin-right: auto;
+    margin-top: 5%;
+}
+
+.manage-criteria {
+    margin-left: 200px;
+    margin-right: auto;
+    margin-top: 5%;
+}
+
+.home {
+    margin-left: 200px;
+    margin-right: 400px;
+    margin-top: 5%;
+}
+
+@media screen and (max-height: 450px) {
+    .sidebar {
+        padding-top: 15px;
+    }
+    .sidebar a {
+        font-size: 18px;
+    }
+}
+
+.wraper {
+    height: 100%;
+    overflow: hidden;
+}
+
+html,
+body {
+    height: 100%;
+    width: 100%;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+#table {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 80%;
+    margin-bottom: 2%;
+}
+
+#table td,
+#table th {
+    border: 1px solid #ddd;
+    text-align: center;
+    padding: 8px;
+}
+
+#table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+#table tr:hover {
+    background-color: #ddd;
+}
+
+#table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: red;
+    color: white;
+    text-align: center;
+}
+
+#action {
+    min-width: 20%;
+    max-width: 20%;
+}
+
+#name {
+    width: 50%;
+}
+
+td,
+th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
 }

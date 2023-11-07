@@ -1,0 +1,13 @@
+.card-rate {
+    border: solid grey;
+    min-height: 200px;
+}
+
+.content-rate {
+    display: grid;
+    grid-template-columns: repeat(
+        2,
+        1fr
+    ); /* you can change 1fr to whatever you want, 200px for example*/
+    gap: 2rem;
+}
