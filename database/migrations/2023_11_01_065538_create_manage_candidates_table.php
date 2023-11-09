@@ -26,6 +26,7 @@ return new class extends Migration
             $table->double('academic_point');
             $table->string('manifesto');
             $table->string('video_link');
+            $table->bigInteger('criteria_id')->nullable();
             $table->timestamps();
         });
     }

@@ -21,7 +21,7 @@ class ManageCandidateController extends Controller
     public function store(Request $request)
     {
         ManageCandidate::create($request->all());
-        return redirect('/viewCandidate');
+        return redirect('/admin/viewCandidate');
     }
 
     // Update Candidate inside DB
@@ -29,7 +29,7 @@ class ManageCandidateController extends Controller
     {
         $criteria = ManageCandidate::find($id);
         $criteria->update($request->all());
-        return redirect('/viewCandidate');
+        return redirect('/admin/viewCandidate');
     }
 
     // Delete Criteria inside DB
@@ -37,6 +37,6 @@ class ManageCandidateController extends Controller
     {
         $criteria = ManageCandidate::find($id);
         $criteria->delete($criteria);
-        return redirect('/viewCandidate')->with('delete', 'Your Card Success been Deleted!.');
+        return redirect('/admin/viewCandidate')->with('delete', 'Your Card Success been Deleted!.');
     }
 }

@@ -5,9 +5,25 @@
 
 .content-rate {
     display: grid;
+    padding-right: 8%;
     grid-template-columns: repeat(
         2,
         1fr
     ); /* you can change 1fr to whatever you want, 200px for example*/
-    gap: 2rem;
+    /* gap: 2rem; */
+}
+
+.card-candidate {
+    border: 2px solid red;
+    min-height: 200px;
+}
+
+.content-candidate {
+    display: grid;
+    padding-right: 8%;
+    grid-template-columns: repeat(
+        2,
+        1fr
+    ); /* you can change 1fr to whatever you want, 200px for example*/
+    /* gap: 2rem; */
 }

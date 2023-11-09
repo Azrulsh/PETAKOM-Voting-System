@@ -28,7 +28,7 @@
                     <div class="modal fade" id="modal-edit-{{ $candidate->id }}" data-bs-backdrop="static"
                         data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg">
-                            <form action="/manage-candidate/{{ $candidate->id }}" method="POST">
+                            <form action="/admin/manage-candidate/{{ $candidate->id }}" method="POST">
                                 @csrf
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -229,7 +229,7 @@
     <div class="modal fade" id="modal-add-candidate" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
-            <form action="/manage-candidate" method="POST">
+            <form action="/admin/manage-candidate" method="POST">
                 @csrf
                 <div class="modal-content">
                     <div class="modal-header">

@@ -21,7 +21,7 @@ class ManageCriteriaController extends Controller
     public function store(Request $request)
     {
         ManageCriteria::create($request->all());
-        return redirect('/viewCriteria');
+        return redirect('/admin/viewCriteria');
     }
 
     // Update Criteria inside DB
@@ -29,7 +29,7 @@ class ManageCriteriaController extends Controller
     {
         $criteria = ManageCriteria::find($id);
         $criteria->update($request->all());
-        return redirect('/viewCriteria');
+        return redirect('/admin/viewCriteria');
     }
 
     // Delete Criteria inside DB
@@ -37,6 +37,6 @@ class ManageCriteriaController extends Controller
     {
         $criteria = ManageCriteria::find($id);
         $criteria->delete($criteria);
-        return redirect('/viewCriteria')->with('delete', 'Your Card Success been Deleted!.');
+        return redirect('/admin/viewCriteria')->with('delete', 'Your Card Success been Deleted!.');
     }
 }

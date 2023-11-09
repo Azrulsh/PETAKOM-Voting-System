@@ -84,6 +84,7 @@
     background-color: red;
     color: white;
     text-decoration: none;
+    padding-left: 240px;
 }
 
 /* Centered section inside the top navigation */
@@ -260,17 +261,25 @@ hr.solid {
 
 .main {
     margin-left: 178px;
-    min-height: 100%;
     background: white;
+    height: 100%;
+    padding: 0px 10px;
+    width: 100%;
+    padding-left: 160px;
+    padding-right: 160px;
 }
 
 .sidebar {
     background-color: red;
     overflow-x: hidden;
     padding-top: 16px;
-    width: 200px;
+    width: 250px;
     float: left;
     min-height: 100%;
+    position: fixed;
+    z-index: 1; /* Stay on top */
+    top: 0; /* Stay at the top */
+    left: 0;
 }
 
 .sidebar a {
@@ -284,12 +293,6 @@ hr.solid {
 .sidebar a:hover,
 .w3-button:hover {
     color: #f1f1f1;
-}
-
-.main {
-    margin-left: 160px; /* Same as the width of the sidenav */
-    padding: 0px 10px;
-    width: 100%;
 }
 
 .manage-candidate {
@@ -321,7 +324,8 @@ hr.solid {
 
 .wraper {
     height: 100%;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 html,

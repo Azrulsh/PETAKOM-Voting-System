@@ -31,12 +31,13 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/dashboard', [UserController::class, 'index']);
     Route::get('/', [UserController::class, 'index']);
 
     Route::prefix('admin')
         ->as('admin.')
         ->group(function () {
+            Route::get('/dashboard', [UserController::class, 'index']);
+
             // Manage Criteria
             Route::get('/viewCriteria', [ManageCriteriaController::class, 'index'],);
             Route::post('/manage-criteria', [ManageCriteriaController::class, 'store'],);
@@ -56,7 +57,18 @@ Route::middleware([
     Route::prefix('voter')
         ->as('voter.')
         ->group(function () {
+            Route::get('/dashboard', [UserController::class, 'index']);
             // Rate Candidate
-            Route::get('/rateCandidate', [RateCandidateController::class, 'index'],);
+            Route::get('/rateCandidate', [RateCandidateController::class, 'position'],);
+
+            // Display all Candidate on Voter Page
+            Route::prefix('rateCandidate')
+                ->as('rateCandidate.')
+                ->group(function () {
+                    // Rate Candidate
+                    Route::get('/student-warefare', [RateCandidateController::class, 'studentWarefare'],);
+                    Route::get('/welfare-exco', [RateCandidateController::class, 'welfareExco'],);
+                    Route::get('/sports-exco', [RateCandidateController::class, 'sportsExco'],);
+                });
         });
 });

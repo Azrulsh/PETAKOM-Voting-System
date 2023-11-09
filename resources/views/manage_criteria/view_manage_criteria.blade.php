@@ -29,7 +29,7 @@
                     <div class="modal fade" id="modal-edit-{{ $criteria->id }}" data-bs-backdrop="static"
                         data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
-                            <form action="/manage-criteria/{{ $criteria->id }}" method="POST">
+                            <form action="/admin/manage-criteria/{{ $criteria->id }}" method="POST">
                                 @csrf
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -68,7 +68,7 @@
     <div class="modal fade" id="modal-add-criteria" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <form action="/manage-criteria" method="POST">
+            <form action="/admin/manage-criteria" method="POST">
                 @csrf
                 <div class="modal-content">
                     <div class="modal-header">

@@ -22,7 +22,7 @@
                     <div class="col">
                         <div class="totalCandidate">
                             <div class="tutorial">
-                                <p id="totalCandidate">{{ DB::table('manage_criterias')->count() }}<br>Total Candidate</p>
+                                <p id="totalCandidate">4<br>Total Positions</p>
                             </div>
                             <svg xmlns="http://www.w3.org/2000/svg" style="height: 50px; width: 50px; margin-bottom: 30px;"
                                 viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
