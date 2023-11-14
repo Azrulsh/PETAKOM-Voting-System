@@ -6,7 +6,7 @@
     </center>
     <section class="content-candidate">
         @foreach ($candidates as $item)
-            @if ($item->position == 'Welfare Exco')
+            @if ($item->position == 'Secretary')
                 @php
                     $hasRated = false;
                     foreach ($voterRate as $rate) {

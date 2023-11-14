@@ -32,7 +32,7 @@
                                 @csrf
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Add Candidate</h1>
+                                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit Candidate</h1>
                                     </div>
                                     <div class="modal-body">
                                         <center>
@@ -134,10 +134,18 @@
                                                 <div class="col-sm-6 col-md-5 col-lg-6">
                                                     <div class="input-group mb-3">
                                                         <span class="input-group-text" id="basic-addon1">Position</span>
-                                                        <input type="text" class="form-control"
+                                                        {{-- <input type="text" class="form-control"
                                                             placeholder="Ex: Type the position" aria-label="position"
                                                             aria-describedby="basic-addon1" name="position"
-                                                            value="{{ $candidate->position }}" required>
+                                                            value="{{ $candidate->position }}" required> --}}
+                                                        <select name="position" class="form-control" required>
+                                                            <option value="{{ $candidate->position }}" hidden>
+                                                                {{ $candidate->position }}</option>
+                                                            <option value="Student Warefare">Student Warefare</option>
+                                                            <option value="Welfare Exco">Welfare Exco</option>
+                                                            <option value="Sports Exco">Sports Exco</option>
+                                                            <option value="Secretary">Secretary</option>
+                                                        </select>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6 col-md-5 offset-md-2 col-lg-6 offset-lg-0">
@@ -152,19 +160,44 @@
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                @foreach ($criterias as $criteria)
+                                                @php
+                                                    foreach ($criterias as $criteria) {
+                                                        $hasVote = false; // Initialize to false for each criteria
+                                                        foreach ($voterRate as $rate) {
+                                                            if ($rate->criteria_id == $criteria->id && $rate->candidate_name == $candidate->full_name) {
+                                                                $hasVote = true; // Set to true if there is a vote for the current criteria
+                                                                break; // No need to continue checking once a vote is found
+                                                            }
+                                                        }
+                                                @endphp
+
+                                                @if ($hasVote)
                                                     <div class="col-sm-5 col-md-6">
                                                         <div class="input-group mb-3">
-                                                            <span class="input-group-text"
-                                                                id="basic-addon1">{{ $criteria->name }}</span>
+                                                            <span class="input-group-text" id="basic-addon1">{{ $criteria->name }}</span>
                                                             <input type="number" min="0" max="5"
-                                                                class="form-control" placeholder="Ex: 3.5 rating"
-                                                                aria-label="volunteering_point"
-                                                                aria-describedby="basic-addon1" name="rate"
-                                                                value="{{ $criteria->rate }}" required>
+                                                                   class="form-control" placeholder="Ex: 3.5 rating"
+                                                                   aria-label="volunteering_point"
+                                                                   aria-describedby="basic-addon1" name="rate"
+                                                                   value="{{ $rate->rate }}" required>
                                                         </div>
                                                     </div>
-                                                @endforeach
+                                                @else
+                                                    <div class="col-sm-5 col-md-6">
+                                                        <div class="input-group mb-3">
+                                                            <span class="input-group-text" id="basic-addon1">{{ $criteria->name }}</span>
+                                                            <input type="number" min="0" max="5"
+                                                                   class="form-control" placeholder="Ex: 3.5 rating"
+                                                                   aria-label="volunteering_point"
+                                                                   aria-describedby="basic-addon1" name="rate"
+                                                                   value="0" required>
+                                                        </div>
+                                                    </div>
+                                                @endif
+
+                                                @php
+                                                    }
+                                                @endphp
                                             </div>
                                         </div>
                                     </div>
@@ -294,9 +327,17 @@
                                 <div class="col-sm-6 col-md-5 col-lg-6">
                                     <div class="input-group mb-3">
                                         <span class="input-group-text" id="basic-addon1">Position</span>
-                                        <input type="text" class="form-control" placeholder="Ex: Type the position"
+                                        {{-- <input type="text" class="form-control" placeholder="Ex: Type the position"
                                             aria-label="position" aria-describedby="basic-addon1" name="position"
-                                            required>
+                                            required> --}}
+                                        <select name="position" class="form-control" required>
+                                            <option hidden>
+                                                Choose the position</option>
+                                            <option value="Student Warefare">Student Warefare</option>
+                                            <option value="Welfare Exco">Welfare Exco</option>
+                                            <option value="Sports Exco">Sports Exco</option>
+                                            <option value="Secretary">Secretary</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-sm-6 col-md-5 offset-md-2 col-lg-6 offset-lg-0">

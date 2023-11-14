@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ManageCandidate;
 use App\Models\ManageCriteria;
+use App\Models\VoterRate;
 use Illuminate\Http\Request;
 
 class ManageCandidateController extends Controller
@@ -13,11 +14,13 @@ class ManageCandidateController extends Controller
     {
         $candidates = ManageCandidate::all();
         $criterias = ManageCriteria::all();
+        $voterRate = VoterRate::all();
         return view(
             'manage_candidate.view_manage_candidate',
             compact([
                 'candidates',
                 'criterias',
+                'voterRate',
             ]),
         );
     }
