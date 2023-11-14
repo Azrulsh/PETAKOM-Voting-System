@@ -11,8 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('manage_criterias', function (Blueprint $table) {
+        Schema::create('voter_rates', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('criteria_id')->default(0);
             $table->string('name');
             $table->string('candidate_name')->nullable();
             $table->string('voter_name')->nullable();
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('manage_criterias');
+        Schema::dropIfExists('voter_rates');
     }
 };

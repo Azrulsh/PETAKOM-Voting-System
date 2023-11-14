@@ -6,6 +6,7 @@ use App\Http\Controllers\ManageCriteriaController;
 use App\Http\Controllers\RateCandidateController;
 use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\CheckUserType;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,6 +26,7 @@ Route::get('/', function () {
 Route::get('/signup', function () {
     return view('auth.register');
 });
+
 
 Route::middleware([
     'auth:sanctum',
@@ -65,9 +67,14 @@ Route::middleware([
             Route::prefix('rateCandidate')
                 ->as('rateCandidate.')
                 ->group(function () {
-                    // Rate Candidate
-                    Route::get('/student-warefare', [RateCandidateController::class, 'studentWarefare'],);
+                    // Rate Candidate (Student Warefare)
+                    Route::get('/student-warefare', [RateCandidateController::class, 'display'],);
+                    Route::post('/student-warefare', [RateCandidateController::class, 'store'],);
+
+                    // Rate Candidate (Student Exco)
                     Route::get('/welfare-exco', [RateCandidateController::class, 'welfareExco'],);
+
+                    // Rate Candidate (Sport Exco)
                     Route::get('/sports-exco', [RateCandidateController::class, 'sportsExco'],);
                 });
         });

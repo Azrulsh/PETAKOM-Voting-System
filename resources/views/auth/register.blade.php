@@ -93,13 +93,10 @@
                         required autocomplete="phoneNo" />
                 </div>
 
-                <div class="mt-3">
+                <div class="mt-3" hidden>
                     <x-label for="typeOfUser" value="{{ __('Type of User') }}" />
-                    <select name="type" id="typeOfUser" required>
-                        <option value="Select Type of User" hidden>Select Type of User</option>
-                        <option value="voter">Voter</option>
-                        <option value="admin">Admin</option>
-                    </select>
+                    <x-input id="type" class="block mt-1 w-full" type="text" name="type" :value="old('type')"
+                        autocomplete="type" hidden/>
                 </div>
 
                 <div class="mt-3">

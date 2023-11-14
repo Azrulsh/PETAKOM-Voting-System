@@ -12,7 +12,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($criteria as $criteria)
+                @foreach ($criterias as $criteria)
                     <tr>
                         <td>{{ $criteria->id }}</td>
                         <td>{{ $criteria->name }}</td>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ManageCandidate;
+use App\Models\ManageCriteria;
 use Illuminate\Http\Request;
 
 class ManageCandidateController extends Controller
@@ -11,9 +12,13 @@ class ManageCandidateController extends Controller
     public function index()
     {
         $candidates = ManageCandidate::all();
+        $criterias = ManageCriteria::all();
         return view(
             'manage_candidate.view_manage_candidate',
-            ['candidates' => $candidates],
+            compact([
+                'candidates',
+                'criterias',
+            ]),
         );
     }
 
@@ -21,6 +26,7 @@ class ManageCandidateController extends Controller
     public function store(Request $request)
     {
         ManageCandidate::create($request->all());
+        ManageCriteria::find($request['criteriaId'])->update($request->all());
         return redirect('/admin/viewCandidate');
     }
 

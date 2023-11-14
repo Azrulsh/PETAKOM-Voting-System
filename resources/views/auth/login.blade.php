@@ -68,8 +68,7 @@
 
                 <div class="mt-3">
                     <x-label for="typeOfUser" value="{{ __('Type of User') }}" />
-                    <select name="type" id="typeOfUser" onchange="hideDiv(this)" required>
-                        <option value="Select Type of User" hidden>Select Type of User</option>
+                    <select name="type" id="typeOfUser" onchange="hideDiv(this)" :value="old('type')" required autofocus autocomplete="type">
                         <option value="voter">Voter</option>
                         <option value="admin">Admin</option>
                     </select>

@@ -68,7 +68,6 @@
                                             </script>
                                         </center>
                                         <br>
-
                                         <div class="container text-center">
                                             <div class="row">
                                                 <div class="col-sm-5 col-md-6">
@@ -81,37 +80,13 @@
                                                             value="{{ $candidate->full_name }}" required>
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0">
-                                                    <div class="input-group mb-3">
-                                                        <span class="input-group-text" id="basic-addon1">Volunteering
-                                                            Point</span>
-                                                        <input type="number" min="0" max="5"
-                                                            class="form-control" placeholder="Ex: 3.5 rating"
-                                                            aria-label="volunteering_point" aria-describedby="basic-addon1"
-                                                            name="volunteering_point"
-                                                            value="{{ $candidate->volunteering_point }}" required>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-sm-6 col-md-5 col-lg-6">
+                                                <div class="col-sm-6 col-md-5 offset-md-2 col-lg-6 offset-lg-0">
                                                     <div class="input-group mb-3">
                                                         <span class="input-group-text" id="basic-addon1">Matric
                                                             ID</span>
                                                         <input type="text" class="form-control" placeholder="Ex: CA29990"
                                                             aria-label="matric_id" aria-describedby="basic-addon1"
                                                             name="matric_id" value="{{ $candidate->matric_id }}" required>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-6 col-md-5 offset-md-2 col-lg-6 offset-lg-0">
-                                                    <div class="input-group mb-3">
-                                                        <span class="input-group-text" id="basic-addon1">Leadership
-                                                            Point</span>
-                                                        <input type="number" min="0" max="5"
-                                                            class="form-control" placeholder="Ex: 3.5 rating"
-                                                            aria-label="leadership_point" aria-describedby="basic-addon1"
-                                                            name="leadership_point"
-                                                            value="{{ $candidate->leadership_point }}" required>
                                                     </div>
                                                 </div>
                                             </div>
@@ -127,45 +102,22 @@
                                                 </div>
                                                 <div class="col-sm-6 col-md-5 offset-md-2 col-lg-6 offset-lg-0">
                                                     <div class="input-group mb-3">
-                                                        <span class="input-group-text" id="basic-addon1">Community
-                                                            Service Point</span>
-                                                        <input type="number" min="0" max="5"
-                                                            class="form-control" placeholder="Ex: 3.5 rating"
-                                                            aria-label="community_service_point"
-                                                            aria-describedby="basic-addon1" name="community_service_point"
-                                                            value="{{ $candidate->community_service_point }}" required>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-sm-6 col-md-5 col-lg-6">
-                                                    <div class="input-group mb-3">
                                                         <span class="input-group-text" id="basic-addon1">Year</span>
                                                         <input type="number" class="form-control" placeholder="Ex: 2000"
-                                                            aria-label="year" aria-describedby="basic-addon1"
-                                                            name="year" value="{{ $candidate->year }}" required>
+                                                            aria-label="year" aria-describedby="basic-addon1" name="year"
+                                                            value="{{ $candidate->year }}" required>
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-6 col-md-5 offset-md-2 col-lg-6 offset-lg-0">
-                                                    <div class="input-group mb-3">
-                                                        <span class="input-group-text" id="basic-addon1">Academic
-                                                            Point</span>
-                                                        <input type="number" min="0" max="5"
-                                                            class="form-control" placeholder="Ex: 3.5 rating"
-                                                            aria-label="academic_point" aria-describedby="basic-addon1"
-                                                            name="academic_point"
-                                                            value="{{ $candidate->academic_point }}" required>
-                                                    </div>
-                                                </div>
+
                                             </div>
                                             <div class="row">
                                                 <div class="col-sm-6 col-md-5 col-lg-6">
                                                     <div class="input-group mb-3">
                                                         <span class="input-group-text" id="basic-addon1">Semester</span>
                                                         <input type="number" min="0" max="2"
-                                                            class="form-control" placeholder="Ex: 2"
-                                                            aria-label="semester" aria-describedby="basic-addon1"
-                                                            name="semester" value="{{ $candidate->semester }}" required>
+                                                            class="form-control" placeholder="Ex: 2" aria-label="semester"
+                                                            aria-describedby="basic-addon1" name="semester"
+                                                            value="{{ $candidate->semester }}" required>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6 col-md-5 offset-md-2 col-lg-6 offset-lg-0">
@@ -199,8 +151,22 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="row">
+                                                @foreach ($criterias as $criteria)
+                                                    <div class="col-sm-5 col-md-6">
+                                                        <div class="input-group mb-3">
+                                                            <span class="input-group-text"
+                                                                id="basic-addon1">{{ $criteria->name }}</span>
+                                                            <input type="number" min="0" max="5"
+                                                                class="form-control" placeholder="Ex: 3.5 rating"
+                                                                aria-label="volunteering_point"
+                                                                aria-describedby="basic-addon1" name="rate"
+                                                                value="{{ $criteria->rate }}" required>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            </div>
                                         </div>
-
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary"
@@ -231,6 +197,7 @@
         <div class="modal-dialog modal-lg">
             <form action="/admin/manage-candidate" method="POST">
                 @csrf
+
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="staticBackdropLabel">Add Candidate</h1>
@@ -269,7 +236,6 @@
                             </script>
                         </center>
                         <br>
-
                         <div class="container text-center">
                             <div class="row">
                                 <div class="col-sm-5 col-md-6">
@@ -282,28 +248,10 @@
                                 </div>
                                 <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0">
                                     <div class="input-group mb-3">
-                                        <span class="input-group-text" id="basic-addon1">Volunteering Point</span>
-                                        <input type="number" min="0" max="5" class="form-control"
-                                            placeholder="Ex: 3.5 rating" aria-label="volunteering_point"
-                                            aria-describedby="basic-addon1" name="volunteering_point" required>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-6 col-md-5 col-lg-6">
-                                    <div class="input-group mb-3">
                                         <span class="input-group-text" id="basic-addon1">Matric ID</span>
                                         <input type="text" class="form-control" placeholder="Ex: CA29990"
                                             aria-label="matric_id" aria-describedby="basic-addon1" name="matric_id"
                                             required>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6 col-md-5 offset-md-2 col-lg-6 offset-lg-0">
-                                    <div class="input-group mb-3">
-                                        <span class="input-group-text" id="basic-addon1">Leadership Point</span>
-                                        <input type="number" min="0" max="5" class="form-control"
-                                            placeholder="Ex: 3.5 rating" aria-label="leadership_point"
-                                            aria-describedby="basic-addon1" name="leadership_point" required>
                                     </div>
                                 </div>
                             </div>
@@ -316,30 +264,11 @@
                                             aria-describedby="basic-addon1" name="course" required>
                                     </div>
                                 </div>
-                                <div class="col-sm-6 col-md-5 offset-md-2 col-lg-6 offset-lg-0">
-                                    <div class="input-group mb-3">
-                                        <span class="input-group-text" id="basic-addon1">Community Service
-                                            Point</span>
-                                        <input type="number" min="0" max="5" class="form-control"
-                                            placeholder="Ex: 3.5 rating" aria-label="community_service_point"
-                                            aria-describedby="basic-addon1" name="community_service_point" required>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-6 col-md-5 col-lg-6">
+                                <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0">
                                     <div class="input-group mb-3">
                                         <span class="input-group-text" id="basic-addon1">Year</span>
                                         <input type="number" class="form-control" placeholder="Ex: 2000"
                                             aria-label="year" aria-describedby="basic-addon1" name="year" required>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6 col-md-5 offset-md-2 col-lg-6 offset-lg-0">
-                                    <div class="input-group mb-3">
-                                        <span class="input-group-text" id="basic-addon1">Academic Point</span>
-                                        <input type="number" min="0" max="5" class="form-control"
-                                            placeholder="Ex: 3.5 rating" aria-label="academic_point"
-                                            aria-describedby="basic-addon1" name="academic_point" required>
                                     </div>
                                 </div>
                             </div>
@@ -379,12 +308,32 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">
+                                @foreach ($criterias as $criteria)
+                                    <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0">
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text" id="basic-addon1">{{ $criteria->name }}</span>
+                                            <input type="number" min="0" max="5" class="form-control"
+                                                placeholder="Ex: 3.5 rating" aria-label="rate"
+                                                aria-describedby="basic-addon1" name="rate" value="" required>
+                                        </div>
+                                    </div>
+                                    <input type="text" hidden value="{{ $criteria->id }}" name="criteriaId">
+                                @endforeach
+                            </div>
                         </div>
-
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-danger">Save</button>
+                        @if (DB::table('manage_criterias')->count() == 0)
+                            <div>
+                                You doesn't have the Criteria. Create one first.
+                            </div>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        @else
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-danger">Save</button>
+                        @endif
+
                     </div>
                 </div>
             </form>

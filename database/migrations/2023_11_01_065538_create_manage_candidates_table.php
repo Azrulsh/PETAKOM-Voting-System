@@ -20,13 +20,9 @@ return new class extends Migration
             $table->integer('year');
             $table->integer('semester');
             $table->string('position');
-            $table->double('volunteering_point');
-            $table->double('leadership_point');
-            $table->double('community_service_point');
-            $table->double('academic_point');
             $table->string('manifesto');
             $table->string('video_link');
-            $table->bigInteger('criteria_id')->nullable();
+            $table->json('criteria_rate')->nullable();
             $table->timestamps();
         });
     }
