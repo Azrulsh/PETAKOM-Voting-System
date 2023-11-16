@@ -48,7 +48,7 @@ class ManageCriteriaController extends Controller
             $voter = VoterRate::where('criteria_id', 0);
             $voterId = VoterRate::where('criteria_id', $id);
 
-            // Find and delete associated Student Warefare Database instances
+            // Find and delete associated Student Affair Database instances
             $studentWarefare = StudentWarefare::where('criteria_id', 0);
             $studentWarefareId = StudentWarefare::where('criteria_id', $id);
 
@@ -130,7 +130,7 @@ class ManageCriteriaController extends Controller
             $voter = VoterRate::where('criteria_id', 0);
             $voterId = VoterRate::where('criteria_id', $id);
 
-            // Find and delete associated Student Warefare Database instances
+            // Find and delete associated Student Affair Database instances
             $studentWarefare = StudentWarefare::where('criteria_id', 0);
             $studentWarefareId = StudentWarefare::where('criteria_id', $id);
 

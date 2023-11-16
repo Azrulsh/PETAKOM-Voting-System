@@ -45,7 +45,7 @@
                 <div class="modal fade" id="modal-rate-{{ $item->id }}-candidate" data-bs-backdrop="static"
                     data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <div class="modal-dialog modal-lg">
-                        <form action="/voter/rateCandidate/student-warefare" method="POST">
+                        <form action="/voter/rateCandidate/sports-exco" method="POST">
                             @csrf
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -75,7 +75,7 @@
                                                     <td>
                                                         <div class="row-4 rating">
                                                             <input type="text" hidden value="{{ $item->full_name }}"
-                                                                name="candidate_name">
+                                                                name="candidate_name[{{ $criteria->id }}]">
                                                             <input type="text" hidden value="{{ Auth::user()->name }}"
                                                                 name="voter_name">
                                                             <input type="text" hidden value="{{ $criteria->name }}"

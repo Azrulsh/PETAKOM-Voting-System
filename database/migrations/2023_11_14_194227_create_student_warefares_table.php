@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('criteria_id')->default(0);
             $table->string('name');
-            $table->string('voter_name')->nullable();
+            $table->string('candidate_name')->nullable();
             $table->double('rate')->default(0);
             $table->timestamps();
         });

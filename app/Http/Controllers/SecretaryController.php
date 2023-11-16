@@ -36,76 +36,96 @@ class SecretaryController extends Controller
         $numberVoterDouble = floatval($numberVoter);
 
         foreach ($request->input('rate') as $criteriaId => $rateValueInput) {
-
             $voterName = VoterRate::where('id', $criteriaId)->value('voter_name');
-            $candidateName = VoterRate::where('criteria_id', $criteriaId)->value('candidate_name');
+            $candidateName = VoterRate::where('id', $criteriaId)->value('candidate_name');
 
-            if ($request->input('candidate_name') == $candidateName) {
+            $candidateSecretary = Secretary::where('id', $criteriaId)->value('candidate_name');
+
+            // Fetch all candidate names for the given criteria from the database
+            $allCandidateNames = VoterRate::where('criteria_id', $criteriaId)->pluck('candidate_name')->toArray();
+
+            // Check if the candidate name from user input exists in the database
+            if (in_array($request->input('candidate_name.' . $criteriaId), $allCandidateNames)) {
                 $rateValueDB = Secretary::where('id', $criteriaId)->value('rate');
-                $initialRate = Secretary::where('id', $criteriaId)->value('rate');
             } else {
-                $initialRate = 0.0;
                 $rateValueDB = 0.0;
             }
 
             // Ensure $rateValue is a numeric value before division
             $rateValueDouble = floatval($rateValueInput);
 
-            // Calculate the new average rate
-            $averageRate = ($rateValueDouble + $initialRate) / $numberVoterDouble; // Assuming you are adding a new vote
-
             $totalAverageRate = ($rateValueDouble + $rateValueDB) / $numberVoterDouble;
 
             // Check if $averageRate is greater than or equal to 0 before updating the database
-            if ($averageRate >= 0) {
-
+            if ($rateValueDouble >= 0) {
                 if ($voterName == null) {
-                    if ($voterName == null) {
-                        // Update the database for the initial total average Secretary
-                        Secretary::where('id', $criteriaId)->update([
-                            'criteria_id' => $criteriaId,
-                            'rate' => $totalAverageRate,
-                        ]);
+                    // Update the database for the initial total average Student Affair
+                    Secretary::where('id', $criteriaId)->update([
+                        'criteria_id' => $criteriaId,
+                        'candidate_name' => $request->input('candidate_name.' . $criteriaId),
+                        'rate' => $totalAverageRate,
+                    ]);
 
-                        // Update the database for the initial specific criteria
-                        VoterRate::where('id', $criteriaId)->update([
-                            'criteria_id' => $criteriaId,
-                            'name' => $request->input('criteria_name.' . $criteriaId),
-                            'candidate_name' => $request['candidate_name'],
-                            'voter_name' => $request['voter_name'],
-                            'rate' => $averageRate,
-                        ]);
-                    } else {
-                        VoterRate::create([
-                            'criteria_id' => $criteriaId,
-                            'name' => $request->input('criteria_name.' . $criteriaId),
-                            'candidate_name' => $request['candidate_name'],
-                            'voter_name' => $request['voter_name'],
-                            'rate' => $averageRate,
-                        ]);
-                    }
+                    // Update the database for the initial specific criteria
+                    VoterRate::where('id', $criteriaId)->update([
+                        'criteria_id' => $criteriaId,
+                        'name' => $request->input('criteria_name.' . $criteriaId),
+                        'candidate_name' => $request->input('candidate_name.' . $criteriaId),
+                        'voter_name' => $request['voter_name'],
+                        'rate' => $rateValueDouble,
+                    ]);
                 } else {
                     VoterRate::create([
                         'criteria_id' => $criteriaId,
                         'name' => $request->input('criteria_name.' . $criteriaId),
-                        'candidate_name' => $request['candidate_name'],
+                        'candidate_name' => $request->input('candidate_name.' . $criteriaId),
                         'voter_name' => $request['voter_name'],
-                        'rate' => $averageRate,
+                        'rate' => $rateValueDouble,
                     ]);
 
-                    if ($request->input('candidate_name') == $candidateName) {
-                        // Update the database for the Secretary total Average
+                    if ($candidateSecretary == null) {
+                        // Update the database for the initial total average Student Affair
                         Secretary::where('id', $criteriaId)->update([
                             'criteria_id' => $criteriaId,
+                            'candidate_name' => $request->input('candidate_name.' . $criteriaId),
                             'rate' => $totalAverageRate,
                         ]);
-                    } else {
-                        // Update the database for the Secretary total Average
-                        Secretary::create([
+
+                        VoterRate::create([
                             'criteria_id' => $criteriaId,
                             'name' => $request->input('criteria_name.' . $criteriaId),
-                            'rate' => $averageRate,
+                            'candidate_name' => $request->input('candidate_name.' . $criteriaId),
+                            'voter_name' => $request['voter_name'],
+                            'rate' => $rateValueDouble,
                         ]);
+                    } else {
+                        if ($request->input('candidate_name.' . $criteriaId) == $candidateName) {
+                            // Update the database for the Student Affair total Average
+                            Secretary::where('id', $criteriaId)->update([
+                                'criteria_id' => $criteriaId,
+                                'rate' => $totalAverageRate,
+                            ]);
+                        } else {
+                            // Check if a record already exists for the new candidate_name
+                            $existingRecord = Secretary::where('candidate_name', $request->input('candidate_name.' . $criteriaId))
+                                ->where('criteria_id', $criteriaId)
+                                ->first();
+
+                            if ($existingRecord) {
+                                // Update the existing record
+                                $existingRecord->update([
+                                    'rate' => $totalAverageRate,
+                                ]);
+                            } else {
+                                // Create a new record in the database for the Student Affair total Average
+                                Secretary::create([
+                                    'criteria_id' => $criteriaId,
+                                    'candidate_name' => $request->input('candidate_name.' . $criteriaId),
+                                    'name' => $request->input('criteria_name.' . $criteriaId),
+                                    'rate' => $totalAverageRate,
+                                ]);
+                            }
+                        }
                     }
                 }
             }

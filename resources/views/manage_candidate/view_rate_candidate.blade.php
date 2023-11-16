@@ -9,7 +9,7 @@
             <center style="padding-top: 5%; padding-bottom: 2%;">
                 <img src="{{ url('/img/student-affairs-icon.png') }}" alt="default-image" width="200" height="200">
                 <br>
-                <h2><b>Student Warefare</b></h2>
+                <h2><b>Student Affair</b></h2>
                 <br>
                 <a href="/voter/rateCandidate/student-warefare">
                     <button class="btn btn-danger">Next</button>

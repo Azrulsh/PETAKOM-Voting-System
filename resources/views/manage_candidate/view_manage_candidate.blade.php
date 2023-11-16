@@ -141,7 +141,7 @@
                                                         <select name="position" class="form-control" required>
                                                             <option value="{{ $candidate->position }}" hidden>
                                                                 {{ $candidate->position }}</option>
-                                                            <option value="Student Warefare">Student Warefare</option>
+                                                            <option value="Student Affair">Student Affair</option>
                                                             <option value="Welfare Exco">Welfare Exco</option>
                                                             <option value="Sports Exco">Sports Exco</option>
                                                             <option value="Secretary">Secretary</option>
@@ -333,7 +333,7 @@
                                         <select name="position" class="form-control" required>
                                             <option hidden>
                                                 Choose the position</option>
-                                            <option value="Student Warefare">Student Warefare</option>
+                                            <option value="Student Affair">Student Affair</option>
                                             <option value="Welfare Exco">Welfare Exco</option>
                                             <option value="Sports Exco">Sports Exco</option>
                                             <option value="Secretary">Secretary</option>

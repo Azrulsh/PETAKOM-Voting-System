@@ -56,7 +56,20 @@ Route::middleware([
             Route::get('/manage-candidate/{id}/delete', [ManageCandidateController::class, 'destroy'],);
 
             // Report
+
             Route::get('/report', [ReportController::class, 'index'],);
+            Route::prefix('report')
+                ->as('report.')
+                ->group(function () {
+                    Route::get('/generate', [ReportController::class, 'display'],);
+
+                    // Generate Result
+                    Route::prefix('generate')
+                        ->as('generate.')
+                        ->group(function () {
+                            Route::get('/result', [ResultController::class, 'index'],);
+                        });
+                });
         });
 
     Route::prefix('voter')
@@ -70,7 +83,7 @@ Route::middleware([
             Route::prefix('rateCandidate')
                 ->as('rateCandidate.')
                 ->group(function () {
-                    // Rate Candidate (Student Warefare)
+                    // Rate Candidate (Student Affair)
                     Route::get('/student-warefare', [StudentWarefareController::class, 'display'],);
                     Route::post('/student-warefare', [StudentWarefareController::class, 'store'],);
 

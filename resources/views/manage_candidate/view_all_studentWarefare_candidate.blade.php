@@ -6,7 +6,7 @@
     </center>
     <section class="content-candidate">
         @foreach ($candidates as $item)
-            @if ($item->position == 'Student Warefare')
+            @if ($item->position == 'Student Affair')
                 @php
                     $hasRated = false;
                     foreach ($voterRate as $rate) {
@@ -76,7 +76,7 @@
                                                     <td>
                                                         <div class="row-4 rating">
                                                             <input type="text" hidden value="{{ $item->full_name }}"
-                                                                name="candidate_name">
+                                                                name="candidate_name[{{ $criteria->id }}]">
                                                             <input type="text" hidden value="{{ Auth::user()->name }}"
                                                                 name="voter_name">
                                                             <input type="text" hidden value="{{ $criteria->name }}"
