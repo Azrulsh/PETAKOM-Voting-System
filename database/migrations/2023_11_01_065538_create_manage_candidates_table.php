@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('manage_candidates', function (Blueprint $table) {
             $table->id();
-            $table->string('image')->nullable();
+            $table->binary('image')->nullable();
             $table->string('full_name');
             $table->string('matric_id');
             $table->string('course');
