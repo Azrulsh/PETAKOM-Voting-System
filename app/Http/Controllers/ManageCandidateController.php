@@ -53,14 +53,10 @@ class ManageCandidateController extends Controller
     public function update(Request $request, $id)
     {
         $candidate = ManageCandidate::find($id);
-        // Check if the user provided a new image
-        if ($request->hasFile('image')) {
-            $imageContent = file_get_contents($request->file('image')->getRealPath());
-            $request['image'] = $imageContent;
-        } else {
-            // If no new image provided, keep the existing image
+        if ($candidate->image != null) {
             $request['image'] = $candidate->image;
         }
+
         $candidate->update($request->all());
         return redirect('/admin/viewCandidate');
     }
