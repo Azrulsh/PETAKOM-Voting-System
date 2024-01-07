@@ -143,7 +143,7 @@
                         <a href="/" style="color: var(--Blue-1, #2F80ED);">Already registered?</a>
                     </div>
                     <br>
-                    <button type="submit" class="btn btn-danger" style="background-color: red;">Singup</button>
+                    <button type="submit" class="btn btn-danger" style="background-color: red;">Sign up</button>
                 </center>
             </form>
         </div>
