@@ -42,6 +42,8 @@
                         $result['total'] = array_sum($result['criteria_ratings']);
                     }
 
+                    unset($result);
+
                     // Sort the results array based on total in descending order
                     usort($groupedResults, function ($a, $b) {
                         return $b['total'] - $a['total'];
@@ -53,6 +55,9 @@
                     foreach ($groupedResults as &$result) {
                         $result['rank'] = $rank++;
                     }
+
+                    unset($result);
+                    
                 @endphp
 
                 @foreach ($groupedResults as $result)
