@@ -29,10 +29,11 @@ class SportsExcoController extends Controller
         );
     }
 
-    // Store Candidate Rate of Welfare Exco DB
     public function store(Request $request)
     {
-        $criteriaIds = ManageCriteria::pluck('id')->all();
+        // 1. Get all criteria
+        $criterias = ManageCriteria::all();
+        $criteriaIds = $criterias->pluck('id')->all();
 
         if (empty($criteriaIds)) {
             return back()->withErrors([
@@ -40,139 +41,118 @@ class SportsExcoController extends Controller
             ]);
         }
 
+        // 2. Validate rating
         $rules = [
-            'rate' => [
-                'required',
-                'array:' . implode(',', $criteriaIds),
-            ],
+            'rate' => ['required', 'array'],
             'rate.*' => ['required', 'integer', 'between:1,5'],
+            'candidate_name' => ['required', 'array'],
         ];
 
         foreach ($criteriaIds as $criteriaId) {
             $rules["rate.$criteriaId"] = [
-                'required',
-                'integer',
-                'between:1,5',
+                'required', 'integer', 'between:1,5'
+            ];
+
+            $rules["candidate_name.$criteriaId"] = [
+                'required', 'string'
             ];
         }
 
         $request->validate($rules);
 
+        // Ensure only existing criteria are submitted
+        $submittedIds = array_keys($request->input('rate'));
+        sort($submittedIds);
+        sort($criteriaIds);
+
+        if ($submittedIds != $criteriaIds) {
+            return back()->withErrors([
+                'rate' => 'Please rate all valid criteria.',
+            ]);
+        }
+
+        // 3. Verify candidate
+        $candidateNames = array_unique(
+            array_values($request->input('candidate_name'))
+        );
+
+        if (count($candidateNames) !== 1) {
+            return back()->withErrors([
+                'rate' => 'Invalid candidate submission.',
+            ]);
+        }
+
+        $candidateName = reset($candidateNames);
+
+        $candidate = ManageCandidate::where('full_name', $candidateName)
+            ->where('position', 'Sports Exco')
+            ->first();
+
+        if (!$candidate || $request->user()?->type !== 'voter') {
+            abort(403, 'Unauthorized rating submission.');
+        }
+
         $voterName = $request->user()->name;
 
-        foreach ($request->input('rate', []) as $criteriaId => $rate) {
-            $candidateName = $request->input("candidate_name.$criteriaId");
+        // 4. Save ratings and calculate averages
+        DB::transaction(function () use (
+            $request,
+            $candidate,
+            $candidateName,
+            $voterName,
+            $criterias
+        ) {
+            // Lock candidate to serialize concurrent submissions
+            ManageCandidate::whereKey($candidate->id)
+                ->lockForUpdate()
+                ->firstOrFail();
 
-            if (!$candidateName) {
-                return back()->withErrors([
-                    'rate' => 'Invalid candidate submission.',
-                ]);
-            }
-
-            $alreadyRated = VoterRate::where('criteria_id', $criteriaId)
-                ->where('candidate_name', $candidateName)
+            // Check duplicate rating
+            $alreadyRated = VoterRate::where('candidate_name', $candidateName)
                 ->where('voter_name', $voterName)
+                ->whereIn('criteria_id', $criterias->pluck('id'))
                 ->exists();
 
             if ($alreadyRated) {
-                return back()->withErrors([
+                throw \Illuminate\Validation\ValidationException::withMessages([
                     'rate' => 'You have already rated this candidate.',
                 ]);
             }
-        }
-        
-        $numberVoter = DB::table('users')->where('type', 'voter')->count();
-        $numberVoterDouble = floatval($numberVoter);
 
-        foreach ($request->input('rate') as $criteriaId => $rateValueInput) {
-            $voterName = VoterRate::where('id', $criteriaId)->value('voter_name');
-            $candidateName = VoterRate::where('id', $criteriaId)->value('candidate_name');
+            foreach ($criterias as $criteria) {
+                $criteriaId = $criteria->id;
 
-            $candidateSportsExco = SportsExco::where('id', $criteriaId)->value('candidate_name');
+                // Save individual voter rating
+                VoterRate::create([
+                    'criteria_id' => $criteriaId,
+                    'name' => $criteria->name,
+                    'candidate_name' => $candidateName,
+                    'voter_name' => $voterName,
+                    'rate' => $request->input("rate.$criteriaId"),
+                ]);
 
-            // Fetch all candidate names for the given criteria from the database
-            $allCandidateNames = VoterRate::where('criteria_id', $criteriaId)->pluck('candidate_name')->toArray();
+                // Recalculate average from actual voter ratings
+                $average = VoterRate::where('criteria_id', $criteriaId)
+                    ->where('candidate_name', $candidateName)
+                    ->whereNotNull('voter_name')
+                    ->where('voter_name', '!=', '')
+                    ->avg('rate');
 
-            // Check if the candidate name from user input exists in the database
-            if (in_array($request->input('candidate_name.' . $criteriaId), $allCandidateNames)) {
-                $rateValueDB = SportsExco::where('id', $criteriaId)->value('rate');
-            } else {
-                $rateValueDB = 0.0;
+                // Store average for this candidate and criteria
+                SportsExco::updateOrCreate(
+                    [
+                        'criteria_id' => $criteriaId,
+                        'candidate_name' => $candidateName,
+                    ],
+                    [
+                        'name' => $criteria->name,
+                        'rate' => $average,
+                    ]
+                );
             }
-
-            // Ensure $rateValue is a numeric value before division
-            $rateValueDouble = floatval($rateValueInput);
-
-            $totalAverageRate = ($rateValueDouble + $rateValueDB) / $numberVoterDouble;
-
-            // Check if $averageRate is greater than or equal to 0 before updating the database
-            if ($rateValueDouble >= 0) {
-                if ($voterName == null) {
-                    // Update the database for the initial total average Student Affair
-                    SportsExco::where('id', $criteriaId)->update([
-                        'criteria_id' => $criteriaId,
-                        'candidate_name' => $request->input('candidate_name.' . $criteriaId),
-                        'rate' => $totalAverageRate,
-                    ]);
-
-                    // Update the database for the initial specific criteria
-                    VoterRate::where('id', $criteriaId)->update([
-                        'criteria_id' => $criteriaId,
-                        'name' => $request->input('criteria_name.' . $criteriaId),
-                        'candidate_name' => $request->input('candidate_name.' . $criteriaId),
-                        'voter_name' => $request->user()->name,
-                        'rate' => $rateValueDouble,
-                    ]);
-                } else {
-                    VoterRate::create([
-                        'criteria_id' => $criteriaId,
-                        'name' => $request->input('criteria_name.' . $criteriaId),
-                        'candidate_name' => $request->input('candidate_name.' . $criteriaId),
-                        'voter_name' => $request->user()->name,
-                        'rate' => $rateValueDouble,
-                    ]);
-
-                    if ($candidateSportsExco == null) {
-                        // Update the database for the initial total average Student Affair
-                        SportsExco::where('id', $criteriaId)->update([
-                            'criteria_id' => $criteriaId,
-                            'candidate_name' => $request->input('candidate_name.' . $criteriaId),
-                            'rate' => $totalAverageRate,
-                        ]);
-
-                    } else {
-                        if ($request->input('candidate_name.' . $criteriaId) == $candidateName) {
-                            // Update the database for the Student Affair total Average
-                            SportsExco::where('id', $criteriaId)->update([
-                                'criteria_id' => $criteriaId,
-                                'rate' => $totalAverageRate,
-                            ]);
-                        } else {
-                            // Check if a record already exists for the new candidate_name
-                            $existingRecord = SportsExco::where('candidate_name', $request->input('candidate_name.' . $criteriaId))
-                                ->where('criteria_id', $criteriaId)
-                                ->first();
-
-                            if ($existingRecord) {
-                                // Update the existing record
-                                $existingRecord->update([
-                                    'rate' => $totalAverageRate,
-                                ]);
-                            } else {
-                                // Create a new record in the database for the Student Affair total Average
-                                SportsExco::create([
-                                    'criteria_id' => $criteriaId,
-                                    'candidate_name' => $request->input('candidate_name.' . $criteriaId),
-                                    'name' => $request->input('criteria_name.' . $criteriaId),
-                                    'rate' => $totalAverageRate,
-                                ]);
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        });
 
         return redirect('/voter/rateCandidate/sports-exco');
     }
+
 }

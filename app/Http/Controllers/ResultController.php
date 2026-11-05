@@ -3,109 +3,93 @@
 namespace App\Http\Controllers;
 
 use App\Models\ManageCandidate;
-use App\Models\Secretary;
-use App\Models\SportsExco;
-use App\Models\StudentWarefare;
-use App\Models\WelfareExco;
-use Illuminate\Http\Request;
+use App\Models\ManageCriteria;
+use App\Models\VoterRate;
 
 class ResultController extends Controller
 {
-    //Display all result
+    
     public function index()
     {
-        $studentWarefare = StudentWarefare::all();
-        $welfareExco = WelfareExco::all();
-        $sportsExco = SportsExco::all();
-        $secretary = Secretary::all();
-        $candidates = ManageCandidate::all();
+        $criteriaIds = ManageCriteria::pluck('id');
 
-        $swMaxValue = StudentWarefare::max('rate');
-        $weMaxValue = WelfareExco::max('rate');
-        $seMaxValue = SportsExco::max('rate');
-        $sMaxValue = Secretary::max('rate');
-
-        $candidateNameSW = null;
-        $candidateIdSW = null;
-        $candidateNameWE = null;
-        $candidateIdWE = null;
-        $candidateNameSE = null;
-        $candidateIdSE = null;
-        $candidateNameS = null;
-        $candidateIdS = null;
-
-        foreach ($studentWarefare as $student) {
-            if ($student->rate == $swMaxValue) {
-                $candidateNameSW = $student->candidate_name;
-                foreach ($candidates as $candidate) {
-                    if ($candidate->full_name == $student->candidate_name) {
-                        $candidateIdSW = $candidate->matric_id;
-                        // Break out of the loop once the first record with the maximum 'rate' is found
-                        break;
-                    }
-                }
-                // Break out of the loop once the first record with the maximum 'rate' is found
-                break;
+        $calculateWinner = function (string $position) use ($criteriaIds) {
+            if ($criteriaIds->isEmpty()) {
+                return [null, null];
             }
-        }
 
-        foreach ($welfareExco as $student) {
-            if ($student->rate == $weMaxValue) {
-                $candidateNameWE = $student->candidate_name;
-                foreach ($candidates as $candidate) {
-                    if ($candidate->full_name == $student->candidate_name) {
-                        $candidateIdWE = $candidate->matric_id;
-                        // Break out of the loop once the first record with the maximum 'rate' is found
-                        break;
+            $candidates = ManageCandidate::where('position', $position)->get();
+
+            $scores = [];
+
+            foreach ($candidates as $candidate) {
+                $criteriaAverages = [];
+
+                foreach ($criteriaIds as $criteriaId) {
+                    $average = VoterRate::where(
+                        'candidate_name',
+                        $candidate->full_name
+                    )
+                        ->where('criteria_id', $criteriaId)
+                        ->whereNotNull('voter_name')
+                        ->where('voter_name', '!=', '')
+                        ->avg('rate');
+
+                    if ($average === null) {
+                        continue 2;
                     }
-                }
-                // Break out of the loop once the first record with the maximum 'rate' is found
-                break;
-            }
-        }
 
-        foreach ($sportsExco as $student) {
-            if ($student->rate == $seMaxValue) {
-                $candidateNameSE = $student->candidate_name;
-                foreach ($candidates as $candidate) {
-                    if ($candidate->full_name == $student->candidate_name) {
-                        $candidateIdSE = $candidate->matric_id;
-                        // Break out of the loop once the first record with the maximum 'rate' is found
-                        break;
-                    }
+                    $criteriaAverages[] = (float) $average;
                 }
-                // Break out of the loop once the first record with the maximum 'rate' is found
-                break;
-            }
-        }
 
-        foreach ($secretary as $student) {
-            if ($student->rate == $sMaxValue) {
-                $candidateNameS = $student->candidate_name;
-                foreach ($candidates as $candidate) {
-                    if ($candidate->full_name == $student->candidate_name) {
-                        $candidateIdS = $candidate->matric_id;
-                        // Break out of the loop once the first record with the maximum 'rate' is found
-                        break;
-                    }
-                }
-                // Break out of the loop once the first record with the maximum 'rate' is found
-                break;
+                $scores[] = [
+                    'name' => $candidate->full_name,
+                    'matric_id' => $candidate->matric_id,
+                    'score' => array_sum($criteriaAverages)
+                        / count($criteriaAverages),
+                ];
             }
-        }
 
-        return view(
-            'report.view_result',
-            compact([
-                'candidateNameSW',
-                'candidateIdSW',
-                'candidateNameWE',
-                'candidateIdWE',
-                'candidateNameSE',
-                'candidateIdSE',
-                'candidateNameS',
-                'candidateIdS',
-            ]),
-        );
+            if (empty($scores)) {
+                return [null, null];
+            }
+
+            $maxScore = max(array_column($scores, 'score'));
+
+            // Preserve tied candidates instead of selecting arbitrarily
+            $winners = array_filter(
+                $scores,
+                fn ($item) => abs($item['score'] - $maxScore) < 0.000001
+            );
+
+            return [
+                implode(', ', array_column($winners, 'name')),
+                implode(', ', array_column($winners, 'matric_id')),
+            ];
+        };
+
+        [$candidateNameSW, $candidateIdSW] =
+            $calculateWinner('Student Affair');
+
+        [$candidateNameWE, $candidateIdWE] =
+            $calculateWinner('Welfare Exco');
+
+        [$candidateNameSE, $candidateIdSE] =
+            $calculateWinner('Sports Exco');
+
+        [$candidateNameS, $candidateIdS] =
+            $calculateWinner('Secretary');
+
+        return view('report.view_result', compact(
+            'candidateNameSW',
+            'candidateIdSW',
+            'candidateNameWE',
+            'candidateIdWE',
+            'candidateNameSE',
+            'candidateIdSE',
+            'candidateNameS',
+            'candidateIdS'
+        ));
     }
+
 }
