@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\ManageCandidate;
+use App\Models\Candidate;
 use App\Models\Criterion;
 use Illuminate\Database\Seeder;
 
@@ -29,7 +29,7 @@ class CandidateSeeder extends Seeder
         ];
 
         foreach ($candidates as [$name, $matricId, $position]) {
-            ManageCandidate::updateOrCreate(
+            Candidate::updateOrCreate(
                 ['matric_id' => $matricId],
                 [
                     'full_name' => $name,

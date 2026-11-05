@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ManageCandidate;
+use App\Models\Candidate;
 use App\Models\Criterion;
 use App\Models\VoterRate;
 
@@ -18,7 +18,7 @@ class ResultController extends Controller
                 return [null, null];
             }
 
-            $candidates = ManageCandidate::where('position', $position)->get();
+            $candidates = Candidate::where('position', $position)->get();
 
             $scores = [];
 

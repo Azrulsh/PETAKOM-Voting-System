@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ManageCandidate;
+use App\Models\Candidate;
 use App\Models\Criterion;
 use App\Models\Secretary;
 use App\Models\VoterRate;
@@ -15,7 +15,7 @@ class SecretaryController extends Controller
     public function display()
     {
         $criterias = Criterion::all();
-        $candidates = ManageCandidate::all();
+        $candidates = Candidate::all();
         $voterRate = VoterRate::all();
         return view(
             'manage_candidate.view_all_secretary_candidate',
@@ -84,7 +84,7 @@ class SecretaryController extends Controller
 
         $candidateName = reset($candidateNames);
 
-        $candidate = ManageCandidate::where('full_name', $candidateName)
+        $candidate = Candidate::where('full_name', $candidateName)
             ->where('position', 'Secretary')
             ->first();
 
@@ -103,7 +103,7 @@ class SecretaryController extends Controller
             $criterias
         ) {
             // Lock candidate to serialize concurrent submissions
-            ManageCandidate::whereKey($candidate->id)
+            Candidate::whereKey($candidate->id)
                 ->lockForUpdate()
                 ->firstOrFail();
 

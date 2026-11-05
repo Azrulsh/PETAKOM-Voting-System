@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ManageCandidate;
+use App\Models\Candidate;
 use App\Models\Criterion;
 use App\Models\VoterRate;
 use App\Models\WelfareExco;
@@ -16,7 +16,7 @@ class WelfareExcoController extends Controller
     public function display()
     {
         $criterias = Criterion::all();
-        $candidates = ManageCandidate::all();
+        $candidates = Candidate::all();
         $voterRate = VoterRate::all();
         return view(
             'manage_candidate.view_all_welfareExco_candidate',
@@ -85,7 +85,7 @@ class WelfareExcoController extends Controller
 
         $candidateName = reset($candidateNames);
 
-        $candidate = ManageCandidate::where('full_name', $candidateName)
+        $candidate = Candidate::where('full_name', $candidateName)
             ->where('position', 'Welfare Exco')
             ->first();
 
@@ -104,7 +104,7 @@ class WelfareExcoController extends Controller
             $criterias
         ) {
             // Lock candidate to serialize concurrent submissions
-            ManageCandidate::whereKey($candidate->id)
+            Candidate::whereKey($candidate->id)
                 ->lockForUpdate()
                 ->firstOrFail();
 

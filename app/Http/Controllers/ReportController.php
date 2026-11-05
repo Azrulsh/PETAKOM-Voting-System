@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ManageCandidate;
+use App\Models\Candidate;
 use App\Models\Criterion;
 use App\Models\Secretary;
 use App\Models\SportsExco;
@@ -16,7 +16,7 @@ class ReportController extends Controller
     public function index()
     {
         $criterias = Criterion::all();
-        $candidates = ManageCandidate::all();
+        $candidates = Candidate::all();
         $totalStudentWarefare = StudentWarefare::all();
         $totalWelfareExco = WelfareExco::all();
         $totalSportsExco = SportsExco::all();
@@ -37,7 +37,7 @@ class ReportController extends Controller
     public function display()
     {
         $criterias = Criterion::all();
-        $candidates = ManageCandidate::all();
+        $candidates = Candidate::all();
         $voterRate = VoterRate::all();
         $totalStudentWarefare = StudentWarefare::all();
         $totalWelfareExco = WelfareExco::all();

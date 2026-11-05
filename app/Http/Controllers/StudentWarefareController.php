@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ManageCandidate;
+use App\Models\Candidate;
 use App\Models\Criterion;
 use App\Models\StudentWarefare;
 use App\Models\VoterRate;
@@ -29,7 +29,7 @@ class StudentWarefareController extends Controller
     public function display()
     {
         $criterias = Criterion::all();
-        $candidates = ManageCandidate::all();
+        $candidates = Candidate::all();
         $voterRate = VoterRate::all();
         return view(
             'manage_candidate.view_all_studentWarefare_candidate',
@@ -98,7 +98,7 @@ class StudentWarefareController extends Controller
 
         $candidateName = reset($candidateNames);
 
-        $candidate = ManageCandidate::where('full_name', $candidateName)
+        $candidate = Candidate::where('full_name', $candidateName)
             ->where('position', 'Student Affair')
             ->first();
 
@@ -117,7 +117,7 @@ class StudentWarefareController extends Controller
             $criterias
         ) {
             // Lock candidate to serialize concurrent submissions
-            ManageCandidate::whereKey($candidate->id)
+            Candidate::whereKey($candidate->id)
                 ->lockForUpdate()
                 ->firstOrFail();
 

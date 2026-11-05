@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCandidateRequest;
 use App\Http\Requests\UpdateCandidateRequest;
-use App\Models\ManageCandidate;
+use App\Models\Candidate;
 use App\Models\Criterion;
 use App\Models\VoterRate;
 use Illuminate\Support\Facades\Storage;
@@ -14,7 +14,7 @@ class ManageCandidateController extends Controller
     // Display Candidate
     public function index()
     {
-        $candidates = ManageCandidate::all();
+        $candidates = Candidate::all();
         $criterias = Criterion::all();
         $voterRate = VoterRate::all();
 
@@ -51,7 +51,7 @@ class ManageCandidateController extends Controller
         }
 
         try {
-            ManageCandidate::create($data);
+            Candidate::create($data);
         } catch (\Throwable $e) {
             if (!empty($data['image'])) {
                 Storage::disk('public')->delete($data['image']);
@@ -66,7 +66,7 @@ class ManageCandidateController extends Controller
 
     public function update(UpdateCandidateRequest $request, $id)
     {
-        $candidate = ManageCandidate::findOrFail($id);
+        $candidate = Candidate::findOrFail($id);
 
         $data = $request->validated();
 
@@ -105,7 +105,7 @@ class ManageCandidateController extends Controller
     // Delete Criteria inside DB
     public function destroy($id)
     {
-        $criteria = ManageCandidate::find($id);
+        $criteria = Candidate::find($id);
         $criteria->delete($criteria);
         return redirect('/admin/viewCandidate')->with('delete', 'Your Card Success been Deleted!.');
     }

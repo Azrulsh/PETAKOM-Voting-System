@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use App\Models\ManageCandidate;
+use App\Models\Candidate;
 
 class UpdateCandidateRequest extends FormRequest
 {
@@ -15,7 +15,7 @@ class UpdateCandidateRequest extends FormRequest
 
     public function rules(): array
     {
-        $candidate = ManageCandidate::findOrFail(
+        $candidate = Candidate::findOrFail(
             $this->route('id')
         );
 
