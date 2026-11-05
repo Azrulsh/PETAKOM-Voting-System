@@ -26,7 +26,7 @@ class UpdateCandidateRequest extends FormRequest
                 'required',
                 'string',
                 'max:255',
-                Rule::unique('manage_candidates', 'matric_id')
+                Rule::unique('candidates', 'matric_id')
                     ->ignore($candidate->id),
             ],
 

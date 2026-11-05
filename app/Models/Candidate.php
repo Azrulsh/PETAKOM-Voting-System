@@ -9,8 +9,6 @@ class Candidate extends Model
 {
     use HasFactory;
 
-    protected $table = 'manage_candidates';
-
     protected $guarded = ['id'];
 
     protected $casts = [

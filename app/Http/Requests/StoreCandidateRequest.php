@@ -21,7 +21,7 @@ class StoreCandidateRequest extends FormRequest
                 'required',
                 'string',
                 'max:255',
-                Rule::unique('manage_candidates', 'matric_id'),
+                Rule::unique('candidates', 'matric_id'),
             ],
 
             'course' => ['required', 'string', 'max:255'],

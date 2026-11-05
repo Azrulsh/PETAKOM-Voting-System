@@ -57,7 +57,7 @@
                     }
 
                     unset($result);
-                    
+
                 @endphp
 
                 @foreach ($groupedResults as $result)
@@ -92,7 +92,7 @@
                 </tr>
             </thead>
             <tbody>
-                @if (DB::table('manage_candidates')->count() == 0)
+                @if (DB::table('candidates')->count() == 0)
                     <tr>
                         <td colspan="{{ 3 + count($criterias) }}">You need to create a Candidate first.</td>
                     </tr>
