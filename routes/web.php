@@ -40,6 +40,7 @@ Route::middleware([
 
     Route::prefix('admin')
         ->as('admin.')
+        ->middleware('admin')
         ->group(function () {
             Route::get('/dashboard', [UserController::class, 'index']);
 
