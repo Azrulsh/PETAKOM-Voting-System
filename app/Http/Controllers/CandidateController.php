@@ -9,7 +9,7 @@ use App\Models\Criterion;
 use App\Models\VoterRate;
 use Illuminate\Support\Facades\Storage;
 
-class ManageCandidateController extends Controller
+class CandidateController extends Controller
 {
     // Display Candidate
     public function index()

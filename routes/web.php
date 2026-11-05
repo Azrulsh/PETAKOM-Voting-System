@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\auth\UserController;
-use App\Http\Controllers\ManageCandidateController;
+use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\CriterionController;
 use App\Http\Controllers\StudentWarefareController;
 use App\Http\Controllers\ReportController;
@@ -51,10 +51,10 @@ Route::middleware([
             Route::get('/manage-criteria/{id}/delete', [CriterionController::class, 'destroy'],);
 
             // Manage Candidate
-            Route::get('/viewCandidate', [ManageCandidateController::class, 'index'],);
-            Route::post('/manage-candidate', [ManageCandidateController::class, 'store'],);
-            Route::post('/manage-candidate/{id}', [ManageCandidateController::class, 'update'],);
-            Route::get('/manage-candidate/{id}/delete', [ManageCandidateController::class, 'destroy'],);
+            Route::get('/viewCandidate', [CandidateController::class, 'index'],);
+            Route::post('/manage-candidate', [CandidateController::class, 'store'],);
+            Route::post('/manage-candidate/{id}', [CandidateController::class, 'update'],);
+            Route::get('/manage-candidate/{id}/delete', [CandidateController::class, 'destroy'],);
 
             // Report
 
