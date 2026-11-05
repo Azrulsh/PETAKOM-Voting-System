@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Criterion;
-use App\Models\VoterRate;
+use App\Models\Rating;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -47,7 +47,7 @@ class CriterionController extends Controller
         $criterion = Criterion::findOrFail($id);
 
         DB::transaction(function () use ($criterion) {
-            VoterRate::where('criteria_id', $criterion->id)->delete();
+            Rating::where('criteria_id', $criterion->id)->delete();
 
             $criterion->delete();
         });

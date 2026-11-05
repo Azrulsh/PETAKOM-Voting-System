@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Candidate;
 use App\Models\Criterion;
-use App\Models\VoterRate;
+use App\Models\Rating;
 
 class ResultController extends Controller
 {
@@ -26,7 +26,7 @@ class ResultController extends Controller
                 $criteriaAverages = [];
 
                 foreach ($criteriaIds as $criteriaId) {
-                    $average = VoterRate::where(
+                    $average = Rating::where(
                         'candidate_name',
                         $candidate->full_name
                     )

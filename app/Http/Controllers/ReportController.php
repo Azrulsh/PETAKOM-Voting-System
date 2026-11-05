@@ -7,7 +7,7 @@ use App\Models\Criterion;
 use App\Models\Secretary;
 use App\Models\SportsExco;
 use App\Models\StudentWarefare;
-use App\Models\VoterRate;
+use App\Models\Rating;
 use App\Models\WelfareExco;
 
 class ReportController extends Controller
@@ -38,7 +38,7 @@ class ReportController extends Controller
     {
         $criterias = Criterion::all();
         $candidates = Candidate::all();
-        $voterRate = VoterRate::all();
+        $voterRate = Rating::all();
         $totalStudentWarefare = StudentWarefare::all();
         $totalWelfareExco = WelfareExco::all();
         $totalSportsExco = SportsExco::all();

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Candidate;
 use App\Models\Criterion;
 use App\Models\StudentWarefare;
-use App\Models\VoterRate;
+use App\Models\Rating;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -30,7 +30,7 @@ class StudentWarefareController extends Controller
     {
         $criterias = Criterion::all();
         $candidates = Candidate::all();
-        $voterRate = VoterRate::all();
+        $voterRate = Rating::all();
         return view(
             'manage_candidate.view_all_studentWarefare_candidate',
             compact(
@@ -122,7 +122,7 @@ class StudentWarefareController extends Controller
                 ->firstOrFail();
 
             // Check duplicate rating
-            $alreadyRated = VoterRate::where('candidate_name', $candidateName)
+            $alreadyRated = Rating::where('candidate_name', $candidateName)
                 ->where('voter_name', $voterName)
                 ->whereIn('criteria_id', $criterias->pluck('id'))
                 ->exists();
@@ -137,7 +137,7 @@ class StudentWarefareController extends Controller
                 $criteriaId = $criteria->id;
 
                 // Save individual voter rating
-                VoterRate::create([
+                Rating::create([
                     'criteria_id' => $criteriaId,
                     'name' => $criteria->name,
                     'candidate_name' => $candidateName,
@@ -146,7 +146,7 @@ class StudentWarefareController extends Controller
                 ]);
 
                 // Recalculate average from actual voter ratings
-                $average = VoterRate::where('criteria_id', $criteriaId)
+                $average = Rating::where('criteria_id', $criteriaId)
                     ->where('candidate_name', $candidateName)
                     ->whereNotNull('voter_name')
                     ->where('voter_name', '!=', '')

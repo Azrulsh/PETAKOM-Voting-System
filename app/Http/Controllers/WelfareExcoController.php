@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Candidate;
 use App\Models\Criterion;
-use App\Models\VoterRate;
+use App\Models\Rating;
 use App\Models\WelfareExco;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -17,7 +17,7 @@ class WelfareExcoController extends Controller
     {
         $criterias = Criterion::all();
         $candidates = Candidate::all();
-        $voterRate = VoterRate::all();
+        $voterRate = Rating::all();
         return view(
             'manage_candidate.view_all_welfareExco_candidate',
             compact(
@@ -109,7 +109,7 @@ class WelfareExcoController extends Controller
                 ->firstOrFail();
 
             // Check duplicate rating
-            $alreadyRated = VoterRate::where('candidate_name', $candidateName)
+            $alreadyRated = Rating::where('candidate_name', $candidateName)
                 ->where('voter_name', $voterName)
                 ->whereIn('criteria_id', $criterias->pluck('id'))
                 ->exists();
@@ -124,7 +124,7 @@ class WelfareExcoController extends Controller
                 $criteriaId = $criteria->id;
 
                 // Save individual voter rating
-                VoterRate::create([
+                Rating::create([
                     'criteria_id' => $criteriaId,
                     'name' => $criteria->name,
                     'candidate_name' => $candidateName,
@@ -133,7 +133,7 @@ class WelfareExcoController extends Controller
                 ]);
 
                 // Recalculate average from actual voter ratings
-                $average = VoterRate::where('criteria_id', $criteriaId)
+                $average = Rating::where('criteria_id', $criteriaId)
                     ->where('candidate_name', $candidateName)
                     ->whereNotNull('voter_name')
                     ->where('voter_name', '!=', '')
