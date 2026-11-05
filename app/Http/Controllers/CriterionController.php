@@ -11,7 +11,7 @@ use App\Models\WelfareExco;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class ManageCriteriaController extends Controller
+class CriterionController extends Controller
 {
     // Display all criteria
     public function index()

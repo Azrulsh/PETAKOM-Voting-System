@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\auth\UserController;
 use App\Http\Controllers\ManageCandidateController;
-use App\Http\Controllers\ManageCriteriaController;
+use App\Http\Controllers\CriterionController;
 use App\Http\Controllers\StudentWarefareController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ResultController;
@@ -45,10 +45,10 @@ Route::middleware([
             Route::get('/dashboard', [UserController::class, 'index']);
 
             // Manage Criteria
-            Route::get('/viewCriteria', [ManageCriteriaController::class, 'index'],);
-            Route::post('/manage-criteria', [ManageCriteriaController::class, 'store'],);
-            Route::post('/manage-criteria/{id}', [ManageCriteriaController::class, 'update'],);
-            Route::get('/manage-criteria/{id}/delete', [ManageCriteriaController::class, 'destroy'],);
+            Route::get('/viewCriteria', [CriterionController::class, 'index'],);
+            Route::post('/manage-criteria', [CriterionController::class, 'store'],);
+            Route::post('/manage-criteria/{id}', [CriterionController::class, 'update'],);
+            Route::get('/manage-criteria/{id}/delete', [CriterionController::class, 'destroy'],);
 
             // Manage Candidate
             Route::get('/viewCandidate', [ManageCandidateController::class, 'index'],);
