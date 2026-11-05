@@ -3,12 +3,9 @@
 use App\Http\Controllers\auth\UserController;
 use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\CriterionController;
-use App\Http\Controllers\StudentWarefareController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ResultController;
-use App\Http\Controllers\SecretaryController;
-use App\Http\Controllers\SportsExcoController;
-use App\Http\Controllers\WelfareExcoController;
+use App\Http\Controllers\RatingController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -76,32 +73,38 @@ Route::middleware([
     Route::prefix('voter')
         ->as('voter.')
         ->group(function () {
-            Route::get('/dashboard', [UserController::class, 'index']);
-            // Rate Candidate
-            Route::get('/rateCandidate', [StudentWarefareController::class, 'position'],);
 
-            // Display all Candidate on Voter Page
+            Route::get('/dashboard', [UserController::class, 'index']);
+
+            // Rate Candidate
             Route::prefix('rateCandidate')
                 ->as('rateCandidate.')
                 ->group(function () {
-                    // Rate Candidate (Student Affair)
-                    Route::get('/student-warefare', [StudentWarefareController::class, 'display'],);
-                    Route::post('/student-warefare', [StudentWarefareController::class, 'store'],);
 
-                    // Rate Candidate (Student Exco)
-                    Route::get('/welfare-exco', [WelfareExcoController::class, 'display'],);
-                    Route::post('/welfare-exco', [WelfareExcoController::class, 'store'],);
+                    // Display all positions
+                    Route::get('/', [
+                        RatingController::class,
+                        'positions'
+                    ])->name('positions');
 
-                    // Rate Candidate (Sport Exco)
-                    Route::get('/sports-exco', [SportsExcoController::class, 'display'],);
-                    Route::post('/sports-exco', [SportsExcoController::class, 'store'],);
+                    // Display candidates by position
+                    Route::get('/{position}', [
+                        RatingController::class,
+                        'index'
+                    ])->name('index');
 
-                    // Rate Candidate (Secretary)
-                    Route::get('/secretary', [SecretaryController::class, 'display'],);
-                    Route::post('/secretary', [SecretaryController::class, 'store'],);
+                    // Submit candidate rating
+                    Route::post('/{position}', [
+                        RatingController::class,
+                        'store'
+                    ])->name('store');
                 });
 
-            // Display the all result
-            Route::get('/viewResult', [ResultController::class, 'index'],);
+            // Display election results
+            Route::get('/viewResult', [
+                ResultController::class,
+                'index'
+            ]);
         });
+
 });
