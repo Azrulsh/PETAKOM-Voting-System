@@ -9,7 +9,5 @@ class Criterion extends Model
 {
     use HasFactory;
 
-    protected $table = 'manage_criterias';
-
     protected $guarded = ['id'];
 }

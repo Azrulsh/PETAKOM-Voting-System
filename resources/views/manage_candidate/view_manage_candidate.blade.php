@@ -381,7 +381,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        @if (DB::table('manage_criterias')->count() == 0)
+                        @if (DB::table('criteria')->count() == 0)
                             <div>
                                 You doesn't have the Criteria. Create one first.
                             </div>
