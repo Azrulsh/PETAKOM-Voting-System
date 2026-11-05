@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ManageCandidate;
-use App\Models\ManageCriteria;
+use App\Models\Criterion;
 use App\Models\StudentWarefare;
 use App\Models\VoterRate;
 use Illuminate\Http\Request;
@@ -14,7 +14,7 @@ class StudentWarefareController extends Controller
     // Display All Criteria
     public function position()
     {
-        $criteria = ManageCriteria::all();
+        $criteria = Criterion::all();
         return view(
             'manage_candidate.view_rate_candidate',
             compact(
@@ -28,7 +28,7 @@ class StudentWarefareController extends Controller
     // Display All Candidate of Student Affair
     public function display()
     {
-        $criterias = ManageCriteria::all();
+        $criterias = Criterion::all();
         $candidates = ManageCandidate::all();
         $voterRate = VoterRate::all();
         return view(
@@ -46,7 +46,7 @@ class StudentWarefareController extends Controller
     public function store(Request $request)
     {
         // 1. Get all criteria
-        $criterias = ManageCriteria::all();
+        $criterias = Criterion::all();
         $criteriaIds = $criterias->pluck('id')->all();
 
         if (empty($criteriaIds)) {

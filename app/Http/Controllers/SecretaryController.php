@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ManageCandidate;
-use App\Models\ManageCriteria;
+use App\Models\Criterion;
 use App\Models\Secretary;
 use App\Models\VoterRate;
 use Illuminate\Http\Request;
@@ -14,7 +14,7 @@ class SecretaryController extends Controller
     // Display All Candidate of Secretary
     public function display()
     {
-        $criterias = ManageCriteria::all();
+        $criterias = Criterion::all();
         $candidates = ManageCandidate::all();
         $voterRate = VoterRate::all();
         return view(
@@ -32,7 +32,7 @@ class SecretaryController extends Controller
     public function store(Request $request)
     {
         // 1. Get all criteria
-        $criterias = ManageCriteria::all();
+        $criterias = Criterion::all();
         $criteriaIds = $criterias->pluck('id')->all();
 
         if (empty($criteriaIds)) {

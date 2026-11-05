@@ -3,14 +3,14 @@
 namespace Database\Seeders;
 
 use App\Models\ManageCandidate;
-use App\Models\ManageCriteria;
+use App\Models\Criterion;
 use Illuminate\Database\Seeder;
 
 class CandidateSeeder extends Seeder
 {
     public function run(): void
     {
-        $criteriaRatings = ManageCriteria::pluck('id')
+        $criteriaRatings = Criterion::pluck('id')
             ->mapWithKeys(fn ($id) => [$id => 3])
             ->all();
 

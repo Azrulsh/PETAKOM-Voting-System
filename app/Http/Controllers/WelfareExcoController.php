@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ManageCandidate;
-use App\Models\ManageCriteria;
+use App\Models\Criterion;
 use App\Models\VoterRate;
 use App\Models\WelfareExco;
 use Illuminate\Http\Request;
@@ -15,7 +15,7 @@ class WelfareExcoController extends Controller
     // Display All Candidate of Welfare Exco
     public function display()
     {
-        $criterias = ManageCriteria::all();
+        $criterias = Criterion::all();
         $candidates = ManageCandidate::all();
         $voterRate = VoterRate::all();
         return view(
@@ -33,7 +33,7 @@ class WelfareExcoController extends Controller
     public function store(Request $request)
     {
         // 1. Get all criteria
-        $criterias = ManageCriteria::all();
+        $criterias = Criterion::all();
         $criteriaIds = $criterias->pluck('id')->all();
 
         if (empty($criteriaIds)) {

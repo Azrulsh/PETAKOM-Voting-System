@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreCandidateRequest;
 use App\Http\Requests\UpdateCandidateRequest;
 use App\Models\ManageCandidate;
-use App\Models\ManageCriteria;
+use App\Models\Criterion;
 use App\Models\VoterRate;
 use Illuminate\Support\Facades\Storage;
 
@@ -15,7 +15,7 @@ class ManageCandidateController extends Controller
     public function index()
     {
         $candidates = ManageCandidate::all();
-        $criterias = ManageCriteria::all();
+        $criterias = Criterion::all();
         $voterRate = VoterRate::all();
 
         // Decode binary images

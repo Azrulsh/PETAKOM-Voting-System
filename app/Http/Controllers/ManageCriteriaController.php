@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ManageCriteria;
+use App\Models\Criterion;
 use App\Models\Secretary;
 use App\Models\SportsExco;
 use App\Models\StudentWarefare;
@@ -16,7 +16,7 @@ class ManageCriteriaController extends Controller
     // Display all criteria
     public function index()
     {
-        $criterias = ManageCriteria::all();
+        $criterias = Criterion::all();
         return view(
             'manage_criteria.view_manage_criteria',
             ['criterias' => $criterias,],
@@ -26,7 +26,7 @@ class ManageCriteriaController extends Controller
     // Store Criteria inside DB
     public function store(Request $request)
     {
-        ManageCriteria::create($request->all());
+        Criterion::create($request->all());
         VoterRate::create($request->all());
         StudentWarefare::create($request->all());
         WelfareExco::create($request->all());
@@ -38,8 +38,8 @@ class ManageCriteriaController extends Controller
     // Update Criteria inside DB
     public function update(Request $request, $id)
     {
-        // Find and delete ManageCriteria
-        $criteria = ManageCriteria::find($id);
+        // Find and delete Criterion
+        $criteria = Criterion::find($id);
 
         if ($criteria) {
             $criteria->update($request->all());
@@ -112,7 +112,7 @@ class ManageCriteriaController extends Controller
 
             return redirect('/admin/viewCriteria');
         } else {
-            // Handle case where ManageCriteria with $id is not found
+            // Handle case where Criterion with $id is not found
             return redirect('/admin/viewCriteria');
         }
     }
@@ -120,8 +120,8 @@ class ManageCriteriaController extends Controller
     // Delete Criteria inside DB
     public function destroy($id)
     {
-        // Find and delete ManageCriteria
-        $criteria = ManageCriteria::find($id);
+        // Find and delete Criterion
+        $criteria = Criterion::find($id);
 
         if ($criteria) {
             $criteria->delete();
@@ -164,7 +164,7 @@ class ManageCriteriaController extends Controller
 
             return redirect('/admin/viewCriteria')->with('delete', 'Your Card Success been Deleted!.');
         } else {
-            // Handle case where ManageCriteria with $id is not found
+            // Handle case where Criterion with $id is not found
             return redirect('/admin/viewCriteria')->with('error', 'Card not found.');
         }
     }

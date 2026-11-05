@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ManageCandidate;
-use App\Models\ManageCriteria;
+use App\Models\Criterion;
 use App\Models\VoterRate;
 
 class ResultController extends Controller
@@ -11,7 +11,7 @@ class ResultController extends Controller
     
     public function index()
     {
-        $criteriaIds = ManageCriteria::pluck('id');
+        $criteriaIds = Criterion::pluck('id');
 
         $calculateWinner = function (string $position) use ($criteriaIds) {
             if ($criteriaIds->isEmpty()) {

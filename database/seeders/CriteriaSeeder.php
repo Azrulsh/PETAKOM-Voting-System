@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\ManageCriteria;
+use App\Models\Criterion;
 use Illuminate\Database\Seeder;
 
 class CriteriaSeeder extends Seeder
@@ -17,7 +17,7 @@ class CriteriaSeeder extends Seeder
         ];
 
         foreach ($criterias as $name) {
-            ManageCriteria::firstOrCreate(
+            Criterion::firstOrCreate(
                 ['name' => $name],
                 [
                     'rate' => 0,
