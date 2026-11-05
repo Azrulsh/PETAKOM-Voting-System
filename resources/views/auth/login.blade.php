@@ -58,20 +58,7 @@
                     <x-label for="password" value="{{ __('Password') }}" />
                     <x-input id="password" class="block mt-1 w-full" type="password" name="password" required
                         autocomplete="current-password" />
-                    {{-- @if (Route::has('password.request'))
-                        <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                            href="{{ route('password.request') }}">
-                            {{ __('Forgot your password?') }}
-                        </a>
-                    @endif --}}
-                </div>
 
-                <div class="mt-4">
-                    <x-label for="typeOfUser" value="{{ __('Type of User') }}" />
-                    <select name="type" id="typeOfUser" onchange="hideDiv(this)" :value="old('type')" required autofocus autocomplete="type">
-                        <option value="voter">Voter</option>
-                        <option value="admin">Admin</option>
-                    </select>
                 </div>
 
                 <div class="block mt-2">
@@ -82,13 +69,12 @@
                 </div>
 
                 <center>
-                    <div id="hideDiv" class="voter">
-                        <div class="block mt-2">
-                            Don't have an account?
-                        </div>
-                        <div class="block mt-2">
-                            <a href="/signup" style="color: var(--Blue-1, #2F80ED);">Sign Up (Voter Only)</a>
-                        </div>
+                    <div class="block mt-2">
+                        Don't have an account?
+                    </div>
+                    
+                    <div class="block mt-2">
+                        <a href="/signup" style="color: var(--Blue-1, #2F80ED);">Sign Up (Voter Only)</a>
                     </div>
 
                     <br>
