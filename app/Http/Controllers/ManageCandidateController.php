@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreCandidateRequest;
+use App\Http\Requests\UpdateCandidateRequest;
 use App\Models\ManageCandidate;
 use App\Models\ManageCriteria;
 use App\Models\VoterRate;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class ManageCandidateController extends Controller
@@ -37,67 +38,69 @@ class ManageCandidateController extends Controller
         );
     }
     
-    public function store(Request $request)
+    public function store(StoreCandidateRequest $request)
     {
-        $data = $request->validate([
-            'full_name' => 'required|string|max:255',
-            'matric_id' => 'required|string|max:255',
-            'course' => 'required|string|max:255',
-            'year' => 'required|integer',
-            'semester' => 'required|integer|min:1',
-            'position' => 'required|string|max:255',
-            'manifesto' => 'nullable|string',
-            'video_link' => 'nullable|string|max:255',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-        ]);
+        $data = $request->validated();
+
+        $data['criteria_rate'] = $data['ratings'];
+        unset($data['ratings']);
 
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')
                 ->store('candidates', 'public');
         }
 
-        ManageCandidate::create($data);
+        try {
+            ManageCandidate::create($data);
+        } catch (\Throwable $e) {
+            if (!empty($data['image'])) {
+                Storage::disk('public')->delete($data['image']);
+            }
+
+            throw $e;
+        }
 
         return redirect('/admin/viewCandidate')
-            ->with('success', 'Candidate created successfully.');
+            ->with('success', 'Candidate added successfully.');
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateCandidateRequest $request, $id)
     {
         $candidate = ManageCandidate::findOrFail($id);
 
-        $data = $request->validate([
-            'full_name' => 'required|string|max:255',
-            'matric_id' => 'required|string|max:255',
-            'course' => 'required|string|max:255',
-            'year' => 'required|integer',
-            'semester' => 'required|integer|min:1',
-            'position' => 'required|string|max:255',
-            'manifesto' => 'nullable|string',
-            'video_link' => 'nullable|string|max:255',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-        ]);
+        $data = $request->validated();
+
+        $data['criteria_rate'] = $data['ratings'];
+        unset($data['ratings']);
+        
+        $oldImage = $candidate->image;
+        $newImage = null;
 
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')
+            $newImage = $request->file('image')
                 ->store('candidates', 'public');
+
+            $data['image'] = $newImage;
         }
 
-        $oldImage = $candidate->image;
+        try {
+            $candidate->update($data);
+        } catch (\Throwable $e) {
+            if ($newImage) {
+                Storage::disk('public')->delete($newImage);
+            }
 
-        $candidate->update($data);
+            throw $e;
+        }
 
-        if (
-            $request->hasFile('image') &&
-            $oldImage &&
-            str_starts_with($oldImage, 'candidates/')
-        ) {
+        if ($newImage && $oldImage && $oldImage !== $newImage) {
             Storage::disk('public')->delete($oldImage);
         }
 
         return redirect('/admin/viewCandidate')
             ->with('success', 'Candidate updated successfully.');
     }
+
 
     // Delete Criteria inside DB
     public function destroy($id)

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('image')->nullable();
             $table->string('full_name');
-            $table->string('matric_id');
+            $table->string('matric_id')->unique();
             $table->string('course');
             $table->integer('year');
             $table->integer('semester');

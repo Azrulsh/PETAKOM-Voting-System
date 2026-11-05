@@ -1,6 +1,24 @@
 @extends('layouts.default')
 
 @section('contents')
+
+    @if ($errors->any())
+        <div class="alert alert-danger" role="alert">
+            <strong>Please correct the following errors:</strong>
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    @if (session('success'))
+        <div class="alert alert-success" role="alert">
+            {{ session('success') }}
+        </div>
+    @endif
+
     <div class="manage-candidate">
         <h2>List of Candidate</h2>
         <table id="table">
@@ -83,8 +101,10 @@
                                                     <div class="input-group mb-3">
                                                         <span class="input-group-text" id="basic-addon1">Candidate
                                                             Name</span>
+                                                        <input type="hidden" name="form_context" value="edit">
+                                                        <input type="hidden" name="candidate_id" value="{{ $candidate->id }}">
                                                         <input type="text" class="form-control"
-                                                            placeholder="Ex: Nafiz Mansor" aria-label="full_name"
+                                                            placeholder="Ex: Azrul Shafiq" aria-label="full_name"
                                                             aria-describedby="basic-addon1" name="full_name"
                                                             value="{{ $candidate->full_name }}" required>
                                                     </div>
@@ -165,46 +185,29 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            
                                             <div class="row">
-                                                @php
-                                                    foreach ($criterias as $criteria) {
-                                                        $hasVote = false; 
-                                                        foreach ($voterRate as $rate) {
-                                                            if ($rate->criteria_id == $criteria->id && $rate->candidate_name == $candidate->full_name) {
-                                                                $hasVote = true; 
-                                                                break; 
-                                                            }
-                                                        }
-                                                @endphp
-
-                                                @if ($hasVote)
+                                                @foreach ($criterias as $criteria)
                                                     <div class="col-sm-5 col-md-6">
                                                         <div class="input-group mb-3">
-                                                            <span class="input-group-text" id="basic-addon1">{{ $criteria->name }}</span>
-                                                            <input type="number" min="0" max="5"
-                                                                   class="form-control" placeholder="Ex: 3.5 rating"
-                                                                   aria-label="volunteering_point"
-                                                                   aria-describedby="basic-addon1" name="rate"
-                                                                   value="{{ $rate->rate }}" required>
-                                                        </div>
-                                                    </div>
-                                                @else
-                                                    <div class="col-sm-5 col-md-6">
-                                                        <div class="input-group mb-3">
-                                                            <span class="input-group-text" id="basic-addon1">{{ $criteria->name }}</span>
-                                                            <input type="number" min="0" max="5"
-                                                                   class="form-control" placeholder="Ex: 3.5 rating"
-                                                                   aria-label="volunteering_point"
-                                                                   aria-describedby="basic-addon1" name="rate"
-                                                                   value="0" required>
-                                                        </div>
-                                                    </div>
-                                                @endif
+                                                            <span class="input-group-text">
+                                                                {{ $criteria->name }}
+                                                            </span>
 
-                                                @php
-                                                    }
-                                                @endphp
+                                                            <input
+                                                                type="number"
+                                                                name="ratings[{{ $criteria->id }}]"
+                                                                min="0"
+                                                                max="5"
+                                                                step="0.5"
+                                                                class="form-control"
+                                                                value="{{ $candidate->criteria_rate[$criteria->id] ?? 0 }}"
+                                                                required>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
                                             </div>
+
                                         </div>
                                     </div>
                                     <div class="modal-footer">
@@ -280,7 +283,8 @@
                                 <div class="col-sm-5 col-md-6">
                                     <div class="input-group mb-3">
                                         <span class="input-group-text" id="basic-addon1">Candidate Name</span>
-                                        <input type="text" class="form-control" placeholder="Ex: Nafiz Mansor"
+                                        <input type="hidden" name="form_context" value="create">
+                                        <input type="text" class="form-control" placeholder="Ex: Azrul Shafiq"
                                             aria-label="full_name" aria-describedby="basic-addon1" name="full_name"
                                             required>
                                     </div>
@@ -352,18 +356,27 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row">      
                                 @foreach ($criterias as $criteria)
                                     <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0">
                                         <div class="input-group mb-3">
-                                            <span class="input-group-text" id="basic-addon1">{{ $criteria->name }}</span>
-                                            <input type="number" min="0" max="5" class="form-control"
-                                                placeholder="Ex: 3.5 rating" aria-label="rate"
-                                                aria-describedby="basic-addon1" name="rate" value="" required>
+                                            <span class="input-group-text">
+                                                {{ $criteria->name }}
+                                            </span>
+
+                                            <input
+                                                type="number"
+                                                name="ratings[{{ $criteria->id }}]"
+                                                min="0"
+                                                max="5"
+                                                step="0.5"
+                                                class="form-control"
+                                                placeholder="Ex: 3.5 rating"
+                                                required>
                                         </div>
                                     </div>
-                                    <input type="text" hidden value="{{ $criteria->id }}" name="criteriaId">
                                 @endforeach
+
                             </div>
                         </div>
                     </div>
@@ -383,4 +396,32 @@
             </form>
         </div>
     </div>
+
+    @if ($errors->any())
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const context = @json(old('form_context'));
+        const candidateId = @json(old('candidate_id'));
+
+        let modalId = null;
+
+        if (context === 'create') {
+            modalId = 'modal-add-candidate';
+        } else if (context === 'edit' && candidateId) {
+            modalId = 'modal-edit-' + candidateId;
+        }
+
+        if (modalId) {
+            const modalElement = document.getElementById(modalId);
+
+            if (modalElement && window.bootstrap?.Modal) {
+                bootstrap.Modal
+                    .getOrCreateInstance(modalElement)
+                    .show();
+            }
+        }
+    });
+    </script>
+    @endif
+    
 @endsection
