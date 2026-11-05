@@ -28,8 +28,8 @@
                     <div class="modal fade" id="modal-edit-{{ $candidate->id }}" data-bs-backdrop="static"
                         data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg">
-                            <form action="/admin/manage-candidate/{{ $candidate->id }}" method="POST">
-                                @csrf
+                           <form action="/admin/manage-candidate/{{ $candidate->id }}" method="POST" enctype="multipart/form-data">
+                            @csrf
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit Candidate</h1>
@@ -39,10 +39,19 @@
                                             <div class="container">
                                                 <div class="picture-container">
                                                     <div class="picture">
-                                                        <img src="{{ $candidate->decoded_image }}" class="picture-src"
-                                                            id="wizardPicturePreview-{{ $candidate->id }}" title="">
-                                                        <input type="file" id="wizard-picture-{{ $candidate->id }}" class=""
-                                                            name="image" value="{{ $candidate->image }}">
+                                                       <img
+                                                            src="{{ $candidate->image
+                                                                ? asset('storage/' . $candidate->image)
+                                                                : asset('images/default-avatar.png') }}"
+                                                            class="picture-src"
+                                                            id="wizardPicturePreview-{{ $candidate->id }}"
+                                                            alt="Candidate Picture">
+
+                                                        <input
+                                                            type="file"
+                                                            id="wizard-picture-{{ $candidate->id }}"
+                                                            name="image"
+                                                            accept="image/jpeg,image/png,image/webp">
                                                     </div>
                                                     <h6 class="">Choose Picture</h6>
                                                 </div>
@@ -134,10 +143,7 @@
                                                 <div class="col-sm-6 col-md-5 col-lg-6">
                                                     <div class="input-group mb-3">
                                                         <span class="input-group-text" id="basic-addon1">Position</span>
-                                                        {{-- <input type="text" class="form-control"
-                                                            placeholder="Ex: Type the position" aria-label="position"
-                                                            aria-describedby="basic-addon1" name="position"
-                                                            value="{{ $candidate->position }}" required> --}}
+
                                                         <select name="position" class="form-control" required>
                                                             <option value="{{ $candidate->position }}" hidden>
                                                                 {{ $candidate->position }}</option>
@@ -162,11 +168,11 @@
                                             <div class="row">
                                                 @php
                                                     foreach ($criterias as $criteria) {
-                                                        $hasVote = false; // Initialize to false for each criteria
+                                                        $hasVote = false; 
                                                         foreach ($voterRate as $rate) {
                                                             if ($rate->criteria_id == $criteria->id && $rate->candidate_name == $candidate->full_name) {
-                                                                $hasVote = true; // Set to true if there is a vote for the current criteria
-                                                                break; // No need to continue checking once a vote is found
+                                                                $hasVote = true; 
+                                                                break; 
                                                             }
                                                         }
                                                 @endphp
@@ -228,7 +234,7 @@
     <div class="modal fade" id="modal-add-candidate" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
-            <form action="/admin/manage-candidate" method="POST">
+            <form action="/admin/manage-candidate" method="POST" enctype="multipart/form-data">
                 @csrf
 
                 <div class="modal-content">
@@ -327,9 +333,6 @@
                                 <div class="col-sm-6 col-md-5 col-lg-6">
                                     <div class="input-group mb-3">
                                         <span class="input-group-text" id="basic-addon1">Position</span>
-                                        {{-- <input type="text" class="form-control" placeholder="Ex: Type the position"
-                                            aria-label="position" aria-describedby="basic-addon1" name="position"
-                                            required> --}}
                                         <select name="position" class="form-control" required>
                                             <option hidden>
                                                 Choose the position</option>

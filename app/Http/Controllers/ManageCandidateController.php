@@ -6,6 +6,7 @@ use App\Models\ManageCandidate;
 use App\Models\ManageCriteria;
 use App\Models\VoterRate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ManageCandidateController extends Controller
 {
@@ -35,30 +36,67 @@ class ManageCandidateController extends Controller
             ]),
         );
     }
-
-    // Store Candidate inside DB
+    
     public function store(Request $request)
     {
-        // Handle image upload
+        $data = $request->validate([
+            'full_name' => 'required|string|max:255',
+            'matric_id' => 'required|string|max:255',
+            'course' => 'required|string|max:255',
+            'year' => 'required|integer',
+            'semester' => 'required|integer|min:1',
+            'position' => 'required|string|max:255',
+            'manifesto' => 'nullable|string',
+            'video_link' => 'nullable|string|max:255',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+        ]);
+
         if ($request->hasFile('image')) {
-            $imageContent = file_get_contents($request->file('image')->getRealPath());
-            $request['image'] = $imageContent;
+            $data['image'] = $request->file('image')
+                ->store('candidates', 'public');
         }
-        ManageCandidate::create($request->all());
-        ManageCriteria::find($request['criteriaId'])->update($request->all());
-        return redirect('/admin/viewCandidate');
+
+        ManageCandidate::create($data);
+
+        return redirect('/admin/viewCandidate')
+            ->with('success', 'Candidate created successfully.');
     }
 
-    // Update Candidate inside DB
     public function update(Request $request, $id)
     {
-        $candidate = ManageCandidate::find($id);
-        if ($candidate->image != null) {
-            $request['image'] = $candidate->image;
+        $candidate = ManageCandidate::findOrFail($id);
+
+        $data = $request->validate([
+            'full_name' => 'required|string|max:255',
+            'matric_id' => 'required|string|max:255',
+            'course' => 'required|string|max:255',
+            'year' => 'required|integer',
+            'semester' => 'required|integer|min:1',
+            'position' => 'required|string|max:255',
+            'manifesto' => 'nullable|string',
+            'video_link' => 'nullable|string|max:255',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+        ]);
+
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')
+                ->store('candidates', 'public');
         }
 
-        $candidate->update($request->all());
-        return redirect('/admin/viewCandidate');
+        $oldImage = $candidate->image;
+
+        $candidate->update($data);
+
+        if (
+            $request->hasFile('image') &&
+            $oldImage &&
+            str_starts_with($oldImage, 'candidates/')
+        ) {
+            Storage::disk('public')->delete($oldImage);
+        }
+
+        return redirect('/admin/viewCandidate')
+            ->with('success', 'Candidate updated successfully.');
     }
 
     // Delete Criteria inside DB
