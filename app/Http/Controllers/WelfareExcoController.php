@@ -33,6 +33,55 @@ class WelfareExcoController extends Controller
     // Store Candidate Rate of Welfare Exco DB
     public function store(Request $request)
     {
+        $criteriaIds = ManageCriteria::pluck('id')->all();
+
+        if (empty($criteriaIds)) {
+            return back()->withErrors([
+                'rate' => 'No rating criteria available.',
+            ]);
+        }
+
+        $rules = [
+            'rate' => [
+                'required',
+                'array:' . implode(',', $criteriaIds),
+            ],
+            'rate.*' => ['required', 'integer', 'between:1,5'],
+        ];
+
+        foreach ($criteriaIds as $criteriaId) {
+            $rules["rate.$criteriaId"] = [
+                'required',
+                'integer',
+                'between:1,5',
+            ];
+        }
+
+        $request->validate($rules);
+
+        $voterName = $request->user()->name;
+
+        foreach ($request->input('rate', []) as $criteriaId => $rate) {
+            $candidateName = $request->input("candidate_name.$criteriaId");
+
+            if (!$candidateName) {
+                return back()->withErrors([
+                    'rate' => 'Invalid candidate submission.',
+                ]);
+            }
+
+            $alreadyRated = VoterRate::where('criteria_id', $criteriaId)
+                ->where('candidate_name', $candidateName)
+                ->where('voter_name', $voterName)
+                ->exists();
+
+            if ($alreadyRated) {
+                return back()->withErrors([
+                    'rate' => 'You have already rated this candidate.',
+                ]);
+            }
+        }
+        
         $numberVoter = DB::table('users')->where('type', 'voter')->count();
         $numberVoterDouble = floatval($numberVoter);
 
@@ -72,7 +121,7 @@ class WelfareExcoController extends Controller
                         'criteria_id' => $criteriaId,
                         'name' => $request->input('criteria_name.' . $criteriaId),
                         'candidate_name' => $request->input('candidate_name.' . $criteriaId),
-                        'voter_name' => $request['voter_name'],
+                        'voter_name' => $request->user()->name,
                         'rate' => $rateValueDouble,
                     ]);
                 } else {
@@ -80,7 +129,7 @@ class WelfareExcoController extends Controller
                         'criteria_id' => $criteriaId,
                         'name' => $request->input('criteria_name.' . $criteriaId),
                         'candidate_name' => $request->input('candidate_name.' . $criteriaId),
-                        'voter_name' => $request['voter_name'],
+                        'voter_name' => $request->user()->name,
                         'rate' => $rateValueDouble,
                     ]);
 
@@ -92,13 +141,6 @@ class WelfareExcoController extends Controller
                             'rate' => $totalAverageRate,
                         ]);
 
-                        VoterRate::create([
-                            'criteria_id' => $criteriaId,
-                            'name' => $request->input('criteria_name.' . $criteriaId),
-                            'candidate_name' => $request->input('candidate_name.' . $criteriaId),
-                            'voter_name' => $request['voter_name'],
-                            'rate' => $rateValueDouble,
-                        ]);
                     } else {
                         if ($request->input('candidate_name.' . $criteriaId) == $candidateName) {
                             // Update the database for the Student Affair total Average

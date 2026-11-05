@@ -1,6 +1,13 @@
 @extends('layouts.default')
 
 @section('contents')
+
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            {{ $errors->first() }}
+        </div>
+    @endif
+    
     <center style="padding-top: 2%; padding-right: 8%">
         <h2>Candidate</h2>
     </center>
@@ -82,7 +89,7 @@
                                                                 name="criteria_name[{{ $criteria->id }}]">
                                                             <label>
                                                                 <input type="radio" name="rate[{{ $criteria->id }}]"
-                                                                    value="1" />
+                                                                    value="1" required />
                                                                 <span class="icon">★</span>
                                                             </label>
                                                             <label>
