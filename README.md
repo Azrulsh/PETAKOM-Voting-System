@@ -1,66 +1,211 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# PETAKOM Voting System (PVS)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+PETAKOM Voting System (PVS) is a Laravel-based web application for managing PETAKOM candidate evaluations and election results. Instead of a conventional single-choice ballot, the system uses a **multi-criteria decision-making (MCDM)** approach: voters evaluate candidates against defined criteria, and the application processes those ratings to produce results.
 
-## About Laravel
+> **Project distinction:** PVS is a standalone project and is separate from PETAKOM Management System (PMS).
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Features
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Administrator
+- Manage candidates (create, view, update and delete).
+- Manage evaluation criteria (create, view, update and delete).
+- View evaluation results and candidate rankings.
+- Access reports and report generation.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Voter
+- Sign in to the voter dashboard.
+- Browse available positions and their candidates.
+- Rate candidates according to the evaluation criteria.
+- View results where permitted by the application.
 
-## Learning Laravel
+### Account management
+- User registration and sign-in.
+- Profile and password management.
+- Password reset and supported two-factor authentication settings.
+- Role-specific Admin and Voter routes.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Voting methodology
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+PVS uses **criteria-based candidate evaluation**, not traditional single-choice voting. Ratings are collected for the configured criteria and used by the application's existing MCDM calculation logic to generate results and rankings.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+The original MCDM methodology is a core requirement of PVS and must be preserved during maintenance or framework upgrades. Refer to the application's rating and result implementation for the precise scoring rules and calculations.
 
-## Laravel Sponsors
+## Technology stack
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+| Component | Technology |
+| --- | --- |
+| Backend | PHP 8.2+, Laravel 12 |
+| Frontend | Tailwind CSS, Blade and JavaScript |
+| Database | MySQL |
+| Authentication | Laravel Fortify / Jetstream |
+| Additional packages | Livewire 3, Filament 3, Laravel Sanctum |
+| Tests | PHPUnit / Laravel testing tools |
+| Package managers | Composer, npm |
 
-### Premium Partners
+The versions installed at the completion of the Laravel 12 upgrade included Laravel **12.71.0**, Filament **3.3.57** and Livewire **3.8.11**. Refer to `composer.lock` for the authoritative installed PHP package versions.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+## Requirements
 
-## Contributing
+- PHP 8.2 or higher, with the PHP extensions required by Composer dependencies
+- Composer
+- MySQL
+- Node.js and npm
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Local installation
 
-## Code of Conduct
+1. Clone the repository and enter its directory:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+   ```bash
+   git clone <repository-url>
+   cd PETAKOM-Voting-System
+   ```
 
-## Security Vulnerabilities
+2. Install PHP dependencies:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+   ```bash
+   composer install
+   ```
+
+3. Create the local environment file from the template:
+
+   **Windows PowerShell**
+   ```powershell
+   Copy-Item .env.example .env
+   ```
+
+   **macOS / Linux**
+   ```bash
+   cp .env.example .env
+   ```
+
+4. Generate an application key:
+
+   ```bash
+   php artisan key:generate
+   ```
+
+5. Create a MySQL database (for example, `pvs`) and update the relevant entries in `.env`:
+
+   ```dotenv
+   APP_ENV=local
+   APP_DEBUG=true
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=pvs
+   DB_USERNAME=your_local_db_user
+   DB_PASSWORD=your_local_db_password
+   ```
+
+6. Apply the database migrations:
+
+   ```bash
+   php artisan migrate
+   ```
+
+   Database seeders, if available and required, should be run separately according to the project's data requirements.
+
+7. Install and compile frontend assets:
+
+   ```bash
+   npm install
+   npm run dev
+   ```
+
+   Keep the Vite development process running while developing. Use `npm run build` when compiling production assets.
+
+8. Start Laravel in a separate terminal:
+
+   ```bash
+   php artisan serve
+   ```
+
+   Open `http://127.0.0.1:8000` in a browser.
+
+> **Note:** Do not commit `.env`, `.env.testing`, passwords, API keys or other secret credentials. Local accounts and evaluation data may need to be created before testing application workflows.
+
+## Automated testing — use a separate database
+
+**Important:** The project's tests use Laravel's `RefreshDatabase` trait. Running tests against the development database can remove existing data. **Never run `php artisan test` against the development database (`pvs`).**
+
+1. Create a **separate, empty MySQL database**, for example `pvs_testing`.
+2. Create `.env.testing` locally (based on `.env`) and set its database values:
+
+   ```dotenv
+   APP_ENV=testing
+   DB_CONNECTION=mysql
+   DB_DATABASE=pvs_testing
+   ```
+
+   Include the required local database credentials and app configuration; keep this file out of Git.
+3. Ensure `phpunit.xml` does not override the testing connection back to `pvs`. If it contains explicit `DB_CONNECTION` / `DB_DATABASE` settings, they must point to the dedicated testing database.
+4. **Verify the testing database name before running tests**:
+
+   ```bash
+   php artisan config:show database.connections.mysql.database --env=testing
+   ```
+
+   The output must show `pvs_testing`, **not `pvs`**.
+5. Only after confirming isolation, run:
+
+   ```bash
+   php artisan test
+   ```
+
+During the Laravel 12 upgrade validation, the existing suite completed with **25 passed, 7 skipped and 0 failed tests (48 assertions)**. Some tests were skipped because the associated optional features were not enabled. These results describe the recorded upgrade check; they are not a guarantee of future test results.
+
+## Manual regression checklist
+
+After changing dependencies, authentication, voting logic or the framework, verify:
+
+- [ ] Administrator and voter login/logout
+- [ ] Registration, profile updates and password management
+- [ ] Candidate CRUD and criteria CRUD
+- [ ] Access controls between Administrator and Voter roles
+- [ ] Position and candidate selection for rating
+- [ ] Submission and persistence of criteria-based candidate ratings
+- [ ] MCDM result calculation and candidate rankings against known expected results
+- [ ] Result and report pages
+- [ ] Tailwind UI, JavaScript behavior and browser console
+- [ ] Laravel application logs for new errors
+
+The existing evaluation and scoring methodology should not be replaced by conventional single-choice voting during regression fixes or enhancements.
+
+## Laravel upgrade history
+
+The project was upgraded incrementally:
+
+```text
+Laravel 10 → Laravel 11 → Laravel 12
+```
+
+At the Laravel 12 validation checkpoint:
+- Laravel CLI and Composer platform checks completed successfully.
+- The existing routes and database migrations were listed successfully.
+- `composer audit` reported no known security vulnerability advisories at the time of the check.
+- The automated suite passed, and the application's major workflows were manually checked.
+
+Continue checking dependencies and security advisories before deployments; audit results can change as new issues are disclosed.
+
+## Useful commands
+
+```bash
+php artisan --version
+php artisan route:list
+php artisan migrate:status
+php artisan optimize:clear
+composer validate
+composer check-platform-reqs
+composer audit
+```
+
+## Development notes
+
+- Keep PVS separate from **PETAKOM Management System (PMS)**.
+- Preserve the criteria-based MCDM voting methodology and existing functional behavior.
+- Validate any new framework or dependency upgrade with both automated and manual regression tests.
+- Do not modify production or development databases using destructive test commands.
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+No license is specified in this README. Refer to the repository's license file, if one exists, for usage and distribution terms.
