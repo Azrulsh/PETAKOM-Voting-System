@@ -81,12 +81,12 @@
 </table>
 
 <center style="padding-right: 150px">
-<!-- Button trigger modal -->
-<a href="/admin/report/generate">
-<button type="button" class="btn btn-danger">
-    NEXT
-</button>
-</a>
+
+    <!-- Button to Generate Report -->
+    <a href="{{ route('admin.reports.generate') }}"
+       class="btn btn-danger">
+        NEXT
+    </a>
 </center>
 
 </div>

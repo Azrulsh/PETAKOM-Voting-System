@@ -24,7 +24,7 @@ class CriterionController extends Controller
 
         Criterion::create($data);
 
-        return redirect('/admin/viewCriteria')
+        return redirect()->route('admin.criteria.index')
             ->with('success', 'Criteria added successfully.');
     }
 
@@ -38,7 +38,7 @@ class CriterionController extends Controller
 
         $criterion->update($data);
 
-        return redirect('/admin/viewCriteria')
+        return redirect()->route('admin.criteria.index')
             ->with('success', 'Criteria updated successfully.');
     }
 
@@ -52,7 +52,7 @@ class CriterionController extends Controller
             $criterion->delete();
         });
 
-        return redirect('/admin/viewCriteria')
+        return redirect()->route('admin.criteria.index')
             ->with('success', 'Criteria deleted successfully.');
     }
 }

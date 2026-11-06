@@ -165,14 +165,12 @@
 </tbody>
 </table>
 
-
 <center style="padding-right: 150px">
-<!-- Button trigger modal -->
-<a href="/admin/report/generate/result">
-<button type="button" class="btn btn-danger">
-    GENERATE REPORT
-</button>
-</a>
+    <!-- Generate Report Button -->
+    <a href="{{ route('admin.results.index') }}"
+       class="btn btn-danger">
+        GENERATE REPORT
+    </a>
 </center>
 
 </div>

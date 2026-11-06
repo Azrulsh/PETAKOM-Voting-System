@@ -30,24 +30,40 @@
             </thead>
             <tbody>
                 @foreach ($candidates as $candidate)
+                    <!-- Edit and Delete Button -->
                     <tr>
                         <td id="name">{{ $candidate->full_name }}</td>
                         <td id="action" style="text-align: center">
-                            <button class="btn btn-danger" type="button" data-bs-toggle="modal"
-                                data-bs-target="#modal-edit-{{ $candidate->id }}">Edit</button>
+                            <button class="btn btn-danger" type="button"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modal-edit-{{ $candidate->id }}">
+                                Edit
+                            </button>
+
                             &nbsp;&nbsp;
-                            <a href="manage-candidate/{{ $candidate->id }}/delete"
-                                onclick="return confirm('Are You Sure?')">
-                                <button class="btn btn-danger" type="button">Delete</button>
-                            </a>
+
+                            <form action="{{ route('admin.candidates.destroy', ['id' => $candidate->id]) }}"
+                                method="POST"
+                                style="display: inline-block;"
+                                onsubmit="return confirm('Are You Sure?')">
+
+                                @csrf
+                                @method('DELETE')
+
+                                <button class="btn btn-danger" type="submit">
+                                    Delete
+                                </button>
+                            </form>
                         </td>
                     </tr>
+
                     <!-- Modal Edit -->
                     <div class="modal fade" id="modal-edit-{{ $candidate->id }}" data-bs-backdrop="static"
                         data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg">
-                           <form action="/admin/manage-candidate/{{ $candidate->id }}" method="POST" enctype="multipart/form-data">
+                           <form action="{{ route('admin.candidates.update', ['id' => $candidate->id]) }}" method="POST" enctype="multipart/form-data">
                             @csrf
+                            @method('PUT')
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit Candidate</h1>
@@ -237,7 +253,7 @@
     <div class="modal fade" id="modal-add-candidate" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
-            <form action="/admin/manage-candidate" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('admin.candidates.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
                 <div class="modal-content">

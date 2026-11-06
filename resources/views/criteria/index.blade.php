@@ -13,24 +13,42 @@
             </thead>
             <tbody>
                 @foreach ($criterias as $criteria)
+               
+                    <!-- Edit and Delete Button -->
                     <tr>
                         <td>{{ $criteria->id }}</td>
                         <td>{{ $criteria->name }}</td>
                         <td style="text-align: center">
-                            <button class="btn btn-danger" type="button" data-bs-toggle="modal"
-                                data-bs-target="#modal-edit-{{ $criteria->id }}">Edit</button>
+                            <button class="btn btn-danger" type="button"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modal-edit-{{ $criteria->id }}">
+                                Edit
+                            </button>
+
                             &nbsp;&nbsp;
-                            <a href="manage-criteria/{{ $criteria->id }}/delete" onclick="return confirm('Are You Sure?')">
-                                <button class="btn btn-danger" type="button">Delete</button>
-                            </a>
+
+                            <form action="{{ route('admin.criteria.destroy', ['id' => $criteria->id]) }}"
+                                method="POST"
+                                style="display: inline-block;"
+                                onsubmit="return confirm('Are You Sure?')">
+
+                                @csrf
+                                @method('DELETE')
+
+                                <button class="btn btn-danger" type="submit">
+                                    Delete
+                                </button>
+                            </form>
                         </td>
                     </tr>
+
                     <!-- Modal Edit -->
                     <div class="modal fade" id="modal-edit-{{ $criteria->id }}" data-bs-backdrop="static"
                         data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
-                            <form action="/admin/manage-criteria/{{ $criteria->id }}" method="POST">
+                            <form action="{{ route('admin.criteria.update', ['id' => $criteria->id]) }}" method="POST">
                                 @csrf
+                                @method('PUT')
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit Criteria</h1>
@@ -68,7 +86,7 @@
     <div class="modal fade" id="modal-add-criteria" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <form action="/admin/manage-criteria" method="POST">
+            <form action="{{ route('admin.criteria.store') }}" method="POST">
                 @csrf
                 <div class="modal-content">
                     <div class="modal-header">

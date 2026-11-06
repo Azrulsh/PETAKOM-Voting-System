@@ -35,40 +35,66 @@ Route::middleware([
 ])->group(function () {
     Route::get('/', [UserController::class, 'index']);
 
-    Route::prefix('admin')
-        ->as('admin.')
-        ->middleware('admin')
-        ->group(function () {
-            Route::get('/dashboard', [UserController::class, 'index']);
+    
+Route::prefix('admin')
+    ->as('admin.')
+    ->middleware('admin')
+    ->group(function () {
 
-            // Manage Criteria
-            Route::get('/viewCriteria', [CriterionController::class, 'index'],);
-            Route::post('/manage-criteria', [CriterionController::class, 'store'],);
-            Route::post('/manage-criteria/{id}', [CriterionController::class, 'update'],);
-            Route::get('/manage-criteria/{id}/delete', [CriterionController::class, 'destroy'],);
+        // Dashboard
+        Route::get('/dashboard', [
+            UserController::class, 'index'
+        ])->name('dashboard');
 
-            // Manage Candidate
-            Route::get('/viewCandidate', [CandidateController::class, 'index'],);
-            Route::post('/manage-candidate', [CandidateController::class, 'store'],);
-            Route::post('/manage-candidate/{id}', [CandidateController::class, 'update'],);
-            Route::get('/manage-candidate/{id}/delete', [CandidateController::class, 'destroy'],);
+        // Candidate Management
+        Route::get('/candidates', [
+            CandidateController::class, 'index'
+        ])->name('candidates.index');
 
-            // Report
+        Route::post('/candidates', [
+            CandidateController::class, 'store'
+        ])->name('candidates.store');
 
-            Route::get('/report', [ReportController::class, 'index'],);
-            Route::prefix('report')
-                ->as('report.')
-                ->group(function () {
-                    Route::get('/generate', [ReportController::class, 'display'],);
+        Route::put('/candidates/{id}', [
+            CandidateController::class, 'update'
+        ])->name('candidates.update');
 
-                    // Generate Result
-                    Route::prefix('generate')
-                        ->as('generate.')
-                        ->group(function () {
-                            Route::get('/result', [ResultController::class, 'index'],);
-                        });
-                });
-        });
+        Route::delete('/candidates/{id}', [
+            CandidateController::class, 'destroy'
+        ])->name('candidates.destroy');
+
+        // Criteria Management
+        Route::get('/criteria', [
+            CriterionController::class, 'index'
+        ])->name('criteria.index');
+
+        Route::post('/criteria', [
+            CriterionController::class, 'store'
+        ])->name('criteria.store');
+
+        Route::put('/criteria/{id}', [
+            CriterionController::class, 'update'
+        ])->name('criteria.update');
+
+        Route::delete('/criteria/{id}', [
+            CriterionController::class, 'destroy'
+        ])->name('criteria.destroy');
+
+        // Reports
+        Route::get('/reports', [
+            ReportController::class, 'index'
+        ])->name('reports.index');
+
+        Route::get('/reports/generate', [
+            ReportController::class, 'display'
+        ])->name('reports.generate');
+
+        // Election Results
+        Route::get('/results', [
+            ResultController::class, 'index'
+        ])->name('results.index');
+    });
+
 
     Route::prefix('voter')
         ->as('voter.')

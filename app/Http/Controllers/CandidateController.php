@@ -41,7 +41,7 @@ class CandidateController extends Controller
             throw $e;
         }
 
-        return redirect('/admin/viewCandidate')
+        return redirect()->route('admin.candidates.index')
             ->with('success', 'Candidate added successfully.');
     }
 
@@ -78,7 +78,7 @@ class CandidateController extends Controller
             Storage::disk('public')->delete($oldImage);
         }
 
-        return redirect('/admin/viewCandidate')
+        return redirect()->route('admin.candidates.index')
             ->with('success', 'Candidate updated successfully.');
     }
 
@@ -88,6 +88,6 @@ class CandidateController extends Controller
     {
         $criteria = Candidate::find($id);
         $criteria->delete($criteria);
-        return redirect('/admin/viewCandidate')->with('delete', 'Your Card Success been Deleted!.');
+        return redirect()->route('admin.candidates.index')->with('delete', 'Your Card Success been Deleted!.');
     }
 }
