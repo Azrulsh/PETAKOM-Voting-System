@@ -5,33 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\Candidate;
 use App\Models\Criterion;
 use App\Models\Rating;
-use App\Models\StudentWarefare;
-use App\Models\WelfareExco;
-use App\Models\SportsExco;
-use App\Models\Secretary;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class RatingController extends Controller
 {
-    private const POSITIONS = [
-        'student-warefare' => [
-            'name' => 'Student Affair',
-            'model' => StudentWarefare::class,
-        ],
-        'welfare-exco' => [
-            'name' => 'Welfare Exco',
-            'model' => WelfareExco::class,
-        ],
-        'sports-exco' => [
-            'name' => 'Sports Exco',
-            'model' => SportsExco::class,
-        ],
-        'secretary' => [
-            'name' => 'Secretary',
-            'model' => Secretary::class,
-        ],
+   private const POSITIONS = [
+        'student-warefare' => 'Student Affair',
+        'welfare-exco' => 'Welfare Exco',
+        'sports-exco' => 'Sports Exco',
+        'secretary' => 'Secretary',
     ];
 
     public function positions()
@@ -43,25 +27,20 @@ class RatingController extends Controller
 
     public function index(string $position)
     {
-        $config = $this->getPosition($position);
+        $positionName = $this->getPosition($position);
 
         $criterias = Criterion::all();
 
-        $candidates = Candidate::where('position', $config['name'])->get();
+        $candidates = Candidate::where('position', $positionName)->get();
 
         $voterRate = Rating::where('voter_name', auth()->user()->name)->get();
 
-        return view('rating.index', compact(
-            'criterias',
-            'candidates',
-            'voterRate',
-            'position'
-        ));
+        return view('rating.index', compact( 'criterias', 'candidates', 'voterRate', 'position'));
     }
 
     public function store(Request $request, string $position)
     {
-        $config = $this->getPosition($position);
+        $positionName = $this->getPosition($position);
 
         abort_unless(
             $request->user()?->type === 'voter',
@@ -123,7 +102,7 @@ class RatingController extends Controller
         $candidateName = reset($candidateNames);
 
         $candidate = Candidate::where('full_name', $candidateName)
-            ->where('position', $config['name'])
+            ->where('position', $positionName)
             ->first();
 
         abort_unless($candidate, 403);
@@ -135,8 +114,7 @@ class RatingController extends Controller
             $candidateName,
             $voterName,
             $criteriaIds,
-            $data,
-            $config
+            $data
         ) {
             Candidate::whereKey($candidate->id)
                 ->lockForUpdate()
@@ -165,27 +143,6 @@ class RatingController extends Controller
                     'rate' => $data['rate'][$id],
                 ]);
             }
-
-            foreach ($criteriaIds as $id) {
-                $criterion = Criterion::findOrFail($id);
-
-                $average = Rating::where('criteria_id', $id)
-                    ->where('candidate_name', $candidateName)
-                    ->whereNotNull('voter_name')
-                    ->where('voter_name', '!=', '')
-                    ->avg('rate');
-
-                $config['model']::updateOrCreate(
-                    [
-                        'criteria_id' => $id,
-                        'candidate_name' => $candidateName,
-                    ],
-                    [
-                        'name' => $criterion->name,
-                        'rate' => $average ?? 0,
-                    ]
-                );
-            }
         });
 
         return redirect(
@@ -193,7 +150,7 @@ class RatingController extends Controller
         )->with('success', 'Rating submitted successfully.');
     }
 
-    private function getPosition(string $position): array
+    private function getPosition(string $position): string
     {
         abort_unless(
             array_key_exists($position, self::POSITIONS),

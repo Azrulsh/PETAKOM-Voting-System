@@ -4,58 +4,88 @@ namespace App\Http\Controllers;
 
 use App\Models\Candidate;
 use App\Models\Criterion;
-use App\Models\Secretary;
-use App\Models\SportsExco;
-use App\Models\StudentWarefare;
 use App\Models\Rating;
-use App\Models\WelfareExco;
+use Illuminate\Support\Collection;
 
 class ReportController extends Controller
 {
-    //Display all report
     public function index()
     {
-        $criterias = Criterion::all();
-        $candidates = Candidate::all();
-        $totalStudentWarefare = StudentWarefare::all();
-        $totalWelfareExco = WelfareExco::all();
-        $totalSportsExco = SportsExco::all();
-        $totalSecretary = Secretary::all();
-        return view(
-            'report.view_all_voter_report',
-            compact([
-                'criterias',
-                'candidates',
-                'totalStudentWarefare',
-                'totalWelfareExco',
-                'totalSportsExco',
-                'totalSecretary',
-            ]),
-        );
+        return view('report.view_all_voter_report', $this->reportData());
     }
 
     public function display()
     {
+        return view('report.view_generate_report', array_merge(
+            $this->reportData(),
+            [
+                'voterRate' => Rating::all(),
+            ]
+        ));
+    }
+
+    private function reportData(): array
+    {
         $criterias = Criterion::all();
         $candidates = Candidate::all();
-        $voterRate = Rating::all();
-        $totalStudentWarefare = StudentWarefare::all();
-        $totalWelfareExco = WelfareExco::all();
-        $totalSportsExco = SportsExco::all();
-        $totalSecretary = Secretary::all();
-        return view(
-            'report.view_generate_report',
-            compact(
-                [
-                    'criterias',
-                    'voterRate',
-                    'candidates',
-                    'totalStudentWarefare',
-                    'totalWelfareExco',
-                    'totalSportsExco',
-                    'totalSecretary',
-                ],
+
+        // Calculate average directly from ratings.
+        $averages = Rating::query()
+            ->selectRaw(
+                'candidate_name, criteria_id, AVG(rate) AS rate'
             )
-        );
+            ->whereNotNull('voter_name')
+            ->where('voter_name', '!=', '')
+            ->groupBy('candidate_name', 'criteria_id')
+            ->get();
+
+        // Preserve the data structure expected by old report Blades.
+        $averages->each(function ($rating) use ($criterias) {
+            $rating->name = $criterias
+                ->firstWhere('id', $rating->criteria_id)?->name;
+        });
+
+        return [
+            'criterias' => $criterias,
+            'candidates' => $candidates,
+
+            'totalStudentWarefare' => $this->byPosition(
+                $averages,
+                $candidates,
+                'Student Affair'
+            ),
+
+            'totalWelfareExco' => $this->byPosition(
+                $averages,
+                $candidates,
+                'Welfare Exco'
+            ),
+
+            'totalSportsExco' => $this->byPosition(
+                $averages,
+                $candidates,
+                'Sports Exco'
+            ),
+
+            'totalSecretary' => $this->byPosition(
+                $averages,
+                $candidates,
+                'Secretary'
+            ),
+        ];
+    }
+
+    private function byPosition(
+        Collection $averages,
+        Collection $candidates,
+        string $position
+    ): Collection {
+        $candidateNames = $candidates
+            ->where('position', $position)
+            ->pluck('full_name');
+
+        return $averages
+            ->whereIn('candidate_name', $candidateNames)
+            ->values();
     }
 }
