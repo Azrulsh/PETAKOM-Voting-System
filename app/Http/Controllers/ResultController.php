@@ -80,7 +80,7 @@ class ResultController extends Controller
         [$candidateNameS, $candidateIdS] =
             $calculateWinner('Secretary');
 
-        return view('report.view_result', compact(
+        return view('report.result', compact(
             'candidateNameSW',
             'candidateIdSW',
             'candidateNameWE',

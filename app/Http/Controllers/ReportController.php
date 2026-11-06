@@ -11,12 +11,12 @@ class ReportController extends Controller
 {
     public function index()
     {
-        return view('report.view_all_voter_report', $this->reportData());
+        return view('report.index', $this->reportData());
     }
 
     public function display()
     {
-        return view('report.view_generate_report', array_merge(
+        return view('report.generate', array_merge(
             $this->reportData(),
             [
                 'voterRate' => Rating::all(),
