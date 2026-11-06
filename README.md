@@ -2,8 +2,6 @@
 
 PETAKOM Voting System (PVS) is a Laravel-based web application for managing PETAKOM candidate evaluations and election results. Instead of a conventional single-choice ballot, the system uses a **multi-criteria decision-making (MCDM)** approach: voters evaluate candidates against defined criteria, and the application processes those ratings to produce results.
 
-> **Project distinction:** PVS is a standalone project and is separate from PETAKOM Management System (PMS).
-
 ## Features
 
 ### Administrator
