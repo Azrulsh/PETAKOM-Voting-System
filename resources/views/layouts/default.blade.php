@@ -79,7 +79,7 @@
                     </svg>
                     Back
                 </a>
-                <a href="/voter/dashboard" class="tablinks w3-bar-item w3-button">
+                <a href="{{ route('voter.dashboard') }}" class="tablinks w3-bar-item w3-button">
                     <svg xmlns="http://www.w3.org/2000/svg" height="1em"
                         viewBox="0 0 576 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
                         <path
@@ -87,7 +87,7 @@
                     </svg>
                     Home
                 </a>
-                <a href="/voter/rateCandidate" class="tablinks w3-bar-item w3-button">
+                <a href="{{ route('voter.ratings.positions') }}" class="tablinks w3-bar-item w3-button">
                     <svg xmlns="http://www.w3.org/2000/svg" height="1em"
                         viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
                         <path
@@ -95,7 +95,7 @@
                     </svg>
                     Rate Candidate
                 </a>
-                <a href="/voter/viewResult" class="tablinks w3-bar-item w3-button">
+                <a href="{{ route('voter.results.index') }}" class="tablinks w3-bar-item w3-button">
                     <svg xmlns="http://www.w3.org/2000/svg" height="1em"
                         viewBox="0 0 384 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
                         <path

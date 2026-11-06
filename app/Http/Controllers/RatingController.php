@@ -11,8 +11,8 @@ use Illuminate\Validation\ValidationException;
 
 class RatingController extends Controller
 {
-   private const POSITIONS = [
-        'student-warefare' => 'Student Affair',
+    private const POSITIONS = [
+        'student-affair' => 'Student Affair',
         'welfare-exco' => 'Welfare Exco',
         'sports-exco' => 'Sports Exco',
         'secretary' => 'Secretary',
@@ -145,9 +145,10 @@ class RatingController extends Controller
             }
         });
 
-        return redirect(
-            '/voter/rateCandidate/' . $position
-        )->with('success', 'Rating submitted successfully.');
+        return redirect()
+            ->route('voter.ratings.index', ['position' => $position])
+            ->with('success', 'Rating submitted successfully.');
+            
     }
 
     private function getPosition(string $position): string

@@ -96,41 +96,39 @@ Route::prefix('admin')
     });
 
 
-    Route::prefix('voter')
-        ->as('voter.')
-        ->group(function () {
+Route::prefix('voter')
+    ->as('voter.')
+    ->group(function () {
 
-            Route::get('/dashboard', [UserController::class, 'index']);
+        Route::get('/dashboard', [
+            UserController::class,
+            'index'
+        ])->name('dashboard');
 
-            // Rate Candidate
-            Route::prefix('rateCandidate')
-                ->as('rateCandidate.')
-                ->group(function () {
+        Route::prefix('ratings')
+            ->as('ratings.')
+            ->group(function () {
 
-                    // Display all positions
-                    Route::get('/', [
-                        RatingController::class,
-                        'positions'
-                    ])->name('positions');
+                Route::get('/', [
+                    RatingController::class,
+                    'positions'
+                ])->name('positions');
 
-                    // Display candidates by position
-                    Route::get('/{position}', [
-                        RatingController::class,
-                        'index'
-                    ])->name('index');
+                Route::get('/{position}', [
+                    RatingController::class,
+                    'index'
+                ])->name('index');
 
-                    // Submit candidate rating
-                    Route::post('/{position}', [
-                        RatingController::class,
-                        'store'
-                    ])->name('store');
-                });
+                Route::post('/{position}', [
+                    RatingController::class,
+                    'store'
+                ])->name('store');
+            });
 
-            // Display election results
-            Route::get('/viewResult', [
-                ResultController::class,
-                'index'
-            ]);
-        });
+        Route::get('/results', [
+            ResultController::class,
+            'index'
+        ])->name('results.index');
+    });
 
 });

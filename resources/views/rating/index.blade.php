@@ -52,7 +52,7 @@
             <div class="modal fade" id="modal-rate-{{ $item->id }}-candidate" data-bs-backdrop="static"
                 data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg">
-                    <form action="{{ route('voter.rateCandidate.store', ['position' => $position]) }}" method="POST">
+                    <form action="{{ route('voter.ratings.store', ['position' => $position]) }}" method="POST">
                         @csrf
                         <div class="modal-content">
                             <div class="modal-header">
